@@ -11,30 +11,20 @@ const breakpoints = createBreakpoints({
 })
 
 const theme = extendTheme({
-  semanticTokens: {
-    colors: {
-      text: {
-        default: '#16161D',
-        _dark: '#ade3b8',
-      },
-      heroGradientStart: {
-        default: '#7928CA',
-        _dark: '#e3a7f9',
-      },
-      heroGradientEnd: {
-        default: '#FF0080',
-        _dark: '#fbec8f',
-      },
-    },
-    radii: {
-      button: '12px',
-    },
-  },
   colors: {
-    black: '#16161D',
-  },
-  fonts,
-  breakpoints,
-})
+    brand: '#0079bf',
+    success: '#70b500',
+    danger: '#eb5a46',
+    info: '#ff9f1a',
+    warning: '#f2d600',
+    darkblue: '#eae6ff',
+    lightblue: '#f2faf9',
+    performance: '#0079bf',
+    bug: '#eb5a46',
+    feature: '#61bd4f',
+    information: '#ff9f1a'
+  }
+});
+
 
 export default theme
