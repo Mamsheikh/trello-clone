@@ -6,6 +6,5 @@ export const User = objectType({
     t.string('id');
     t.string('fullName');
     t.string('email');
-    t.string('password');
   },
 });

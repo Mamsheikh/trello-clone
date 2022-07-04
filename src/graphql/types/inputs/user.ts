@@ -7,3 +7,10 @@ export const createUserInput = inputObjectType({
     t.nonNull.string('email'), t.nonNull.string('password');
   },
 });
+
+export const loginUserInput = inputObjectType({
+  name: 'loginUserInput',
+  definition(t) {
+    t.nonNull.string('email'), t.nonNull.string('password');
+  },
+});
