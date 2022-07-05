@@ -69,18 +69,6 @@ const SignUp = (): JSX.Element => {
     );
   };
 
-  const isButtonDisabled = () => {
-    const isValidPassword = values.password !== values.confirmPassword;
-    const isDisabled = !values.email || !values.fullName;
-
-    return (
-      isValidPassword ||
-      isDisabled ||
-      !values.password ||
-      !values.confirmPassword
-    );
-  };
-
   return (
     <>
       <Box display='flex'>
