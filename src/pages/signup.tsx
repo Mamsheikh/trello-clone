@@ -3,10 +3,9 @@ import {
   Flex,
   Box,
   FormControl,
-  Input,
+  Text,
   Button,
   Image,
-  Link,
   useToast,
   Alert,
   AlertDescription,
@@ -15,118 +14,59 @@ import {
   AlertIcon,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import Link from 'next/link';
 // import shortId from 'shortid';
 // import checkEnvironment from '@/util/check-environment';
 import { useRouter } from 'next/router';
+import LoginInput from '../components/LoginInput';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { useSignupMutation } from '../generated/graphql';
+import { ApolloError } from '@apollo/client';
 
 const SignUp = (): JSX.Element => {
-  const [values, setValues] = useState({
-    email: '',
-    password: '',
-    fullName: '',
-    confirmPassword: '',
-  });
-  const [isCreating, setIsCreatingStatus] = useState(false);
-  const [hasError, setErrorState] = useState(false);
+  const [errMsg, setErrMsg] = useState('');
 
-  //   const toast = useToast();
+  const toast = useToast();
   const router = useRouter();
 
-  const [emailErr, setEmailErr] = useState(false);
-  const [passwordErr, setPasswordErr] = useState(false);
-  const validEmail = new RegExp(
-    '^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$'
-  );
-  const validPassword = new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$');
+  const [signup, { loading, error }] = useSignupMutation();
 
-  const validate = () => {
-    if (!validEmail.test(values.email)) {
-      setEmailErr(true);
-    } else {
-      setEmailErr(false);
-    }
-
-    if (!validPassword.test(values.password)) {
-      setPasswordErr(true);
-    } else {
-      setPasswordErr(false);
-    }
-  };
-
-  //   const showToast = () => {
-  //     toast({
-  //       position: 'top',
-  //       title: 'Account created.',
-  //       description: "We've created your account. Redirecting you to login page in 3 seconds ",
-  //       status: 'success',
-  //       duration: 2500,
-  //       isClosable: true
-  //     });
-  //   };
-
-  const registerUser = async (e) => {
-    e.preventDefault();
-    setIsCreatingStatus(true);
-
-    // const id = shortId.generate();
-    // const host = checkEnvironment();
-
-    const { email, password, confirmPassword, fullName } = values;
-
-    // const data = {
-    //   id,
-    //   email: email,
-    //   password: password,
-    //   confirmPassword: confirmPassword,
-    //   fullName: fullName
-    // };
-
-    // const url = `${host}/api/register`;
-
-    const { email: inviteEmail, token, boardId } = router.query;
-    const isInvitedUser = inviteEmail && token && boardId;
-
-    // if (isInvitedUser && result.message === 'success') {
-    //   redirectToLoginPage(`/login?token=${token}&email=${inviteEmail}&boardId=${boardId}`);
-    // } else {
-    //   if (result.message === 'success') {
-    //     redirectToLoginPage();
-    //   }
-    // }
+  const showToast = () => {
+    toast({
+      position: 'top',
+      title: 'Account created.',
+      description:
+        "We've created your account. Redirecting you to login page in 3 seconds ",
+      status: 'success',
+      duration: 2500,
+      isClosable: true,
+    });
   };
 
   const redirectToLoginPage = (path = '/login') => {
+    showToast();
     setTimeout(() => {
       window.location.href = path;
     }, 3000);
   };
 
   const showSignUpError = () => {
-    if (!hasError) return;
+    if (!errMsg) return;
 
     return (
       <Alert status='error'>
         <AlertIcon />
         <AlertTitle mr={2}>Error</AlertTitle>
-        <AlertDescription>Email already in use</AlertDescription>
+        <AlertDescription>{error?.message}</AlertDescription>
         <CloseButton
           position='absolute'
           right='8px'
           top='8px'
-          onClick={() => setErrorState(!hasError)}
+          onClick={() => setErrMsg('')}
         />
       </Alert>
     );
-  };
-
-  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
-
-    validate();
   };
 
   const isButtonDisabled = () => {
@@ -195,65 +135,122 @@ const SignUp = (): JSX.Element => {
             <h1>Sign up for your account</h1>
           </Box>
           <Box my={4} textAlign='left'>
-            <FormControl isRequired>
-              <Input
-                type='email'
-                name='email'
-                value={values.email}
-                placeholder='Enter Email'
-                onChange={handleChange}
-                autoComplete='off'
-              />
-              {emailErr && <p color='red'>Invalid email.</p>}
-            </FormControl>
-            <FormControl my='4' isRequired>
-              <Input
-                type='text'
-                name='fullName'
-                value={values.fullName}
-                placeholder='Full name'
-                onChange={handleChange}
-                autoComplete='off'
-              />
-            </FormControl>
-            <FormControl my='4'>
-              <Input
-                type='password'
-                name='password'
-                value={values.password}
-                placeholder='Create password'
-                onChange={handleChange}
-              />
-              {passwordErr && <p color='red'>Invalid password.</p>}
-            </FormControl>
-            <FormControl my='4'>
-              <Input
-                type='password'
-                name='confirmPassword'
-                value={values.confirmPassword}
-                placeholder='Confirm password'
-                onChange={handleChange}
-              />
-            </FormControl>
-            <Button
-              fontWeight='semibold'
-              width='full'
-              mt={4}
-              disabled={isButtonDisabled()}
-              bg='success'
-              color='white'
-              onClick={registerUser}
-              isLoading={isCreating}
-              loadingText='Registering'
-            >
-              Sign up
-            </Button>
-            <Box m='5' textAlign='center'>
-              <Link href='/login' color='brand' p='2'>
-                Already have an account? Log in.
-              </Link>
-            </Box>
             {showSignUpError()}
+            {/* <Text textAlign='center' color='red' size='small'>
+              {error?.message}
+            </Text> */}
+            <Formik
+              initialValues={{
+                email: '',
+                fullName: '',
+                password: '',
+                confirm: '',
+              }}
+              validationSchema={Yup.object({
+                fullName: Yup.string()
+                  .required('Full name is required')
+                  .max(200, 'Full name too long'),
+                password: Yup.string()
+                  .required('Password is required')
+                  .min(6, 'Password too short')
+                  .max(200, 'Password too long'),
+                confirm: Yup.string()
+                  .required('Password confirmation is required')
+                  .oneOf([Yup.ref('password'), null], "Passwords don't match"),
+                email: Yup.string()
+                  .required('Email is required')
+                  .email('Invalid email')
+                  .max(200, 'Email too long'),
+              })}
+              onSubmit={async (values, actions) => {
+                const creds = { ...values };
+                // actions.resetForm();
+                try {
+                  const { data } = await signup({
+                    variables: {
+                      input: {
+                        email: creds.email,
+                        password: creds.password,
+                        fullName: creds.fullName,
+                      },
+                    },
+                    onCompleted: (data) => {
+                      redirectToLoginPage();
+                    },
+                  });
+                } catch (error) {
+                  setErrMsg((error as ApolloError).message);
+                }
+              }}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+                /* and other goodies */
+              }) => (
+                <form onSubmit={handleSubmit}>
+                  <LoginInput
+                    name='email'
+                    isRequired
+                    type='email'
+                    placeholder='Enter email'
+                  />
+                  <LoginInput
+                    name='fullName'
+                    isRequired
+                    type='text'
+                    placeholder='Full name'
+                  />
+                  <LoginInput
+                    name='password'
+                    isRequired
+                    type='password'
+                    placeholder='Create password'
+                  />
+                  <LoginInput
+                    name='confirm'
+                    isRequired
+                    type='password'
+                    placeholder='Confirm password'
+                  />
+                  <Button
+                    fontWeight='semibold'
+                    width='full'
+                    mt={4}
+                    type='submit'
+                    // disabled={
+                    //   !values.email || !values.fullName || !values.password
+                    //   // !values.confirm
+                    // }
+                    bg='success'
+                    color='white'
+                    // onClick={registerUser}
+                    isLoading={isSubmitting}
+                    loadingText='Registering'
+                  >
+                    Sign up
+                  </Button>
+                  <Box m='5' textAlign='center'>
+                    <Link href='/login'>
+                      <a>
+                        <Text
+                          color='brand'
+                          p={2}
+                          _hover={{ textDecor: 'underline' }}
+                        >
+                          Already have an account? Log in.
+                        </Text>
+                      </a>
+                    </Link>
+                  </Box>
+                </form>
+              )}
+            </Formik>
           </Box>
         </Box>
       </Flex>

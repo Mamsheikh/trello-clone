@@ -6,11 +6,43 @@ import {
   Box,
   Text,
   Image,
-  Link,
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  CloseButton,
 } from '@chakra-ui/react';
-import React from 'react';
+import Link from 'next/link';
+import React, { useState } from 'react';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import LoginInput from '../components/LoginInput';
+import { useLoginMutation } from '../generated/graphql';
+import { ApolloError } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 const Login = () => {
+  const router = useRouter();
+  const [errMsg, setErrMsg] = useState('');
+  const [login, { error }] = useLoginMutation();
+
+  const showLoginError = () => {
+    if (!errMsg) return;
+
+    return (
+      <Alert status='error'>
+        <AlertIcon />
+        <AlertTitle mr={2}>Error</AlertTitle>
+        <AlertDescription>{error?.message}</AlertDescription>
+        <CloseButton
+          position='absolute'
+          right='8px'
+          top='8px'
+          onClick={() => setErrMsg('')}
+        />
+      </Alert>
+    );
+  };
   return (
     <>
       <Box display='flex' justifyContent='center' alignItems='center' my='40px'>
@@ -66,45 +98,104 @@ const Login = () => {
             <h1>Log in to Trello</h1>
           </Box>
           <Box my={4} textAlign='left'>
-            <form>
-              <FormControl>
-                <Input
-                  type='email'
-                  name='email'
-                  // value={values.email}
-                  placeholder='Enter Email '
-                  // onChange={handleChange}
-                  autoComplete='off'
-                />
-              </FormControl>
-              <FormControl mt={6}>
-                <Input
-                  type='password'
-                  name='password'
-                  // value={values.password}
-                  placeholder='Enter Password'
-                  autoComplete='off'
-                  // onChange={handleChange}
-                />
-              </FormControl>
-              <Button
-                width='full'
-                mt={4}
-                bg='success'
-                color='white'
-                //   onClick={loginUser}
-                //   isLoading={isFetching}
-                loadingText='Logging'
-              >
-                Sign In
-              </Button>
-              <Box m='5' textAlign='center'>
-                <Link href='/signup' color='brand' p='2'>
-                  Sign up for an account
-                </Link>
-              </Box>
-              {/* {showLoginError()} */}
-            </form>
+            {showLoginError()}
+            <Formik
+              initialValues={{
+                email: '',
+                password: '',
+              }}
+              validationSchema={Yup.object({
+                password: Yup.string()
+                  .required('Password is required')
+                  .min(6, 'Password too short')
+                  .max(200, 'Password too long'),
+
+                email: Yup.string()
+                  .required('Email is required')
+                  .email('Invalid email')
+                  .max(200, 'Email too long'),
+              })}
+              onSubmit={async (values, actions) => {
+                const creds = { ...values };
+                actions.resetForm();
+                try {
+                  const { data } = await login({
+                    variables: {
+                      input: {
+                        email: creds.email,
+                        password: creds.password,
+                      },
+                    },
+                    onCompleted(data) {
+                      if (data.login) {
+                        router.push('/home');
+                      }
+                    },
+                  });
+                } catch (error) {
+                  setErrMsg((error as ApolloError).message);
+                }
+              }}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+                /* and other goodies */
+              }) => (
+                <form onSubmit={handleSubmit}>
+                  <LoginInput
+                    name='email'
+                    isRequired
+                    type='email'
+                    placeholder='Enter email'
+                  />
+
+                  <LoginInput
+                    name='password'
+                    isRequired
+                    type='password'
+                    placeholder='Enter password'
+                  />
+
+                  <Button
+                    fontWeight='semibold'
+                    width='full'
+                    mt={4}
+                    type='submit'
+                    // disabled={
+                    //   !values.email || !values.fullName || !values.password
+                    //   // !values.confirm
+                    // }
+                    bg='success'
+                    color='white'
+                    // onClick={registerUser}
+                    isLoading={isSubmitting}
+                    loadingText='Logging...'
+                  >
+                    Login
+                  </Button>
+                  <Box m='5' textAlign='center'>
+                    <Link href='/signup'>
+                      <a>
+                        <Text
+                          color='brand'
+                          p={2}
+                          _hover={{ textDecor: 'underline' }}
+                        >
+                          Signup for an account.
+                        </Text>
+                      </a>
+                    </Link>
+                  </Box>
+                  {/* {showSignUpError()} */}
+                </form>
+              )}
+            </Formik>
           </Box>
         </Box>
       </Flex>
