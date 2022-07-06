@@ -47,8 +47,14 @@ export type MutationSignupArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  board?: Maybe<Board>;
   boards?: Maybe<Array<Maybe<Board>>>;
   hello?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryBoardArgs = {
+  boardId: Scalars['String'];
 };
 
 export type User = {
@@ -80,6 +86,13 @@ export type BoardsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type BoardsQuery = { __typename?: 'Query', boards?: Array<{ __typename?: 'Board', id?: string | null, name?: string | null, backgroundImage?: string | null, user?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null } | null> | null };
+
+export type BoardQueryVariables = Exact<{
+  boardId: Scalars['String'];
+}>;
+
+
+export type BoardQuery = { __typename?: 'Query', board?: { __typename?: 'Board', id?: string | null, name?: string | null, backgroundImage?: string | null, user?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null } | null };
 
 export type SignupMutationVariables = Exact<{
   input: CreateUserInput;
@@ -177,6 +190,48 @@ export function useBoardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Boa
 export type BoardsQueryHookResult = ReturnType<typeof useBoardsQuery>;
 export type BoardsLazyQueryHookResult = ReturnType<typeof useBoardsLazyQuery>;
 export type BoardsQueryResult = Apollo.QueryResult<BoardsQuery, BoardsQueryVariables>;
+export const BoardDocument = gql`
+    query Board($boardId: String!) {
+  board(boardId: $boardId) {
+    id
+    name
+    backgroundImage
+    user {
+      id
+      fullName
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useBoardQuery__
+ *
+ * To run a query within a React component, call `useBoardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBoardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBoardQuery({
+ *   variables: {
+ *      boardId: // value for 'boardId'
+ *   },
+ * });
+ */
+export function useBoardQuery(baseOptions: Apollo.QueryHookOptions<BoardQuery, BoardQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BoardQuery, BoardQueryVariables>(BoardDocument, options);
+      }
+export function useBoardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BoardQuery, BoardQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BoardQuery, BoardQueryVariables>(BoardDocument, options);
+        }
+export type BoardQueryHookResult = ReturnType<typeof useBoardQuery>;
+export type BoardLazyQueryHookResult = ReturnType<typeof useBoardLazyQuery>;
+export type BoardQueryResult = Apollo.QueryResult<BoardQuery, BoardQueryVariables>;
 export const SignupDocument = gql`
     mutation Signup($input: createUserInput!) {
   signup(input: $input) {

@@ -12,7 +12,7 @@ export const createBoardMutation = extendType({
       },
       resolve: async (_parent, { name }, ctx: Context) => {
         const decodedJwt = await isAuth(ctx.req);
-
+        console.log(decodedJwt.userId);
         return await ctx.prisma.board.create({
           data: {
             name,

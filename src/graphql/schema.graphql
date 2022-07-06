@@ -16,6 +16,7 @@ type Mutation {
 }
 
 type Query {
+  board(boardId: String!): Board
   boards: [Board]
   hello: String
 }
