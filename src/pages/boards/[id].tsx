@@ -2,6 +2,9 @@ import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useBoardQuery } from '../../generated/graphql';
+import UserNavbar from '../../components/UserNavbar';
+import SubNavbar from '../../components/sub-navbar';
+// import SubNavbar from '../../components/SubNavbar';
 
 const Board = () => {
   const router = useRouter();
@@ -18,9 +21,9 @@ const Board = () => {
       backgroundRepeat='no-repeat'
       backgroundSize='cover'
     >
-      {/* <UserNavbar />
-    <SubNavbar board={board} />
-    <BoardColumns /> */}
+      <UserNavbar user={data?.board?.user} />
+      <SubNavbar board={data?.board} />
+      {/* <BoardColumns />  */}
     </Box>
   );
 };
