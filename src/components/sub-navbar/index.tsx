@@ -39,7 +39,7 @@ const SubNavbar: React.FC<SubNavbarProps> = ({ board }) => {
       </Box>
       <Box>
         <BoardSettings board={board} />
-        <UnsplashDrawer />
+        <UnsplashDrawer boardId={board?.id} />
         {/* {/* <InviteModal /> */}
       </Box>
     </Box>

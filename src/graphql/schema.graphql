@@ -13,6 +13,7 @@ type Mutation {
   createBoard(name: String!): Board
   login(input: loginUserInput!): User
   signup(input: createUserInput!): User
+  updateBoard(backgroundImage: String, boardId: String!, name: String): Board
 }
 
 type Query {

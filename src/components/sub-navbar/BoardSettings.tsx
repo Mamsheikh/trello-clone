@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Input,
@@ -22,7 +22,7 @@ import {
 } from '@chakra-ui/react';
 import { AiFillSetting, AiOutlineDelete, AiOutlineCheck } from 'react-icons/ai';
 import { useRouter } from 'next/router';
-import { Board } from '../../generated/graphql';
+import { Board, useUpdateBoardMutation } from '../../generated/graphql';
 
 interface BoardSettingsProps {
   board: Board;
@@ -30,6 +30,8 @@ interface BoardSettingsProps {
 
 const BoardSettings: React.FC<BoardSettingsProps> = ({ board }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [updateBoard] = useUpdateBoardMutation();
+  const [name, setName] = useState('');
   //   const board = useAppSelector((state) => state.board.board);
   //   const boardDetail = useAppSelector((state) => state.board);
   //   const boardDelete = useAppSelector((state) => state.board.isLoading);
@@ -37,8 +39,12 @@ const BoardSettings: React.FC<BoardSettingsProps> = ({ board }) => {
   const router = useRouter();
 
   const handleSave = async () => {
-    // await dispatch(saveBoard());
-    // await dispatch(fetchBoard(board._id));
+    await updateBoard({
+      variables: {
+        boardId: board?.id,
+        name,
+      },
+    });
 
     onClose();
   };
@@ -49,6 +55,9 @@ const BoardSettings: React.FC<BoardSettingsProps> = ({ board }) => {
     //   router.push('/boards');
     // }
   };
+  useEffect(() => {
+    setName(board?.name);
+  }, []);
 
   return (
     <>
@@ -70,7 +79,10 @@ const BoardSettings: React.FC<BoardSettingsProps> = ({ board }) => {
                 <TabPanel>
                   <FormControl id='email'>
                     <FormLabel>Board name</FormLabel>
-                    <Input value={board?.name} onChange={(e) => {}} />
+                    <Input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
                     <FormHelperText>
                       You can change this any time
                     </FormHelperText>

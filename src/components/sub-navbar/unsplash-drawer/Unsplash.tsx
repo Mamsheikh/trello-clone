@@ -10,16 +10,22 @@ import {
   Image,
   Button,
 } from '@chakra-ui/react';
+import { useUpdateBoardMutation } from '../../../generated/graphql';
 
-const Unsplash = () => {
+interface Props {
+  boardId: string;
+}
+
+const Unsplash: React.FC<Props> = ({ boardId }) => {
   const [value, setValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [images, setImages] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [updateBoard] = useUpdateBoardMutation();
 
   //   const dispatch = useDispatch();
   const unsplash = createApi({
-    accessKey: 'ev3BDkcl0vEzwPZBT4HPA8pPFQ5r0-Dxaaj7w1CVEPg',
+    accessKey: process.env.NEXT_PUBLIC_UNSPLASH_API,
   });
 
   useEffect(() => {
@@ -39,7 +45,7 @@ const Unsplash = () => {
       orientation: 'landscape',
     });
 
-    setImages(images.response.results);
+    setImages(images?.response?.results);
     setIsLoading(false);
   };
 
@@ -54,7 +60,7 @@ const Unsplash = () => {
 
     setCurrentPage(currentPage + 1);
 
-    const response = imagesSet.response.results;
+    const response = imagesSet?.response?.results;
     const sumAllImages = images.concat(response);
     setImages(sumAllImages);
 
@@ -67,7 +73,12 @@ const Unsplash = () => {
       value: imageURL,
     };
 
-    // await dispatch(updateBoardDetail(data));
+    await updateBoard({
+      variables: {
+        boardId,
+        backgroundImage: imageURL,
+      },
+    }); // await dispatch(updateBoardDetail(data));
   };
 
   return (

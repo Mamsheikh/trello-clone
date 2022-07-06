@@ -36,3 +36,24 @@ query Board($boardId: String!) {
     }
   }
 }
+
+mutation UpdateBoard(
+  $boardId: String!
+  $name: String
+  $backgroundImage: String
+) {
+  updateBoard(
+    boardId: $boardId
+    name: $name
+    backgroundImage: $backgroundImage
+  ) {
+    id
+    name
+    backgroundImage
+    user {
+      email
+      fullName
+      id
+    }
+  }
+}

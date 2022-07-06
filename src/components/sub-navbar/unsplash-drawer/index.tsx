@@ -15,7 +15,10 @@ import React from 'react';
 import { BsImages } from 'react-icons/bs';
 import Unsplash from './Unsplash';
 
-const UnsplashDrawer = (): JSX.Element => {
+interface Props {
+  boardId: string;
+}
+const UnsplashDrawer: React.FC<Props> = ({ boardId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const btnRef = React.useRef();
@@ -42,7 +45,7 @@ const UnsplashDrawer = (): JSX.Element => {
           <DrawerCloseButton />
           <DrawerHeader>Choose background image</DrawerHeader>
           <DrawerBody>
-            <Unsplash />
+            <Unsplash boardId={boardId} />
           </DrawerBody>
           <DrawerFooter>
             <Button
