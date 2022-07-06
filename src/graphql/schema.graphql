@@ -2,12 +2,21 @@
 ### Do not make changes to this file directly
 
 
+type Board {
+  backgroundImage: String
+  id: String
+  name: String
+  user: User
+}
+
 type Mutation {
+  createBoard(name: String!): Board
   login(input: loginUserInput!): User
   signup(input: createUserInput!): User
 }
 
 type Query {
+  boards: [Board]
   hello: String
 }
 

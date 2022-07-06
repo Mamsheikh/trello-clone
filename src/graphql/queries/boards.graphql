@@ -1,0 +1,25 @@
+mutation CreateBoard($name: String!) {
+  createBoard(name: $name) {
+    id
+    name
+    backgroundImage
+    user {
+      id
+      fullName
+      email
+    }
+  }
+}
+
+query Boards {
+  boards {
+    id
+    name
+    backgroundImage
+    user {
+      id
+      fullName
+      email
+    }
+  }
+}
