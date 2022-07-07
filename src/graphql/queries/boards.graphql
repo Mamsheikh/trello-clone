@@ -34,6 +34,24 @@ query Board($boardId: String!) {
       fullName
       email
     }
+    columns {
+      id
+      boardId
+      boardName
+      columnName
+      sequence
+    }
+    cards {
+      id
+      title
+      boardId
+      sequence
+      description
+      type
+      bgColor
+      columnId
+      userId
+    }
   }
 }
 

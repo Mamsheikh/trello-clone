@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useBoardQuery } from '../../generated/graphql';
 import UserNavbar from '../../components/UserNavbar';
 import SubNavbar from '../../components/sub-navbar';
+import BoardColumns from '../../components/board/column';
 // import SubNavbar from '../../components/SubNavbar';
 
 const Board = () => {
@@ -23,7 +24,11 @@ const Board = () => {
     >
       <UserNavbar user={data?.board?.user} />
       <SubNavbar board={data?.board} />
-      {/* <BoardColumns />  */}
+      <BoardColumns
+        boardId={data?.board?.id}
+        columns={data?.board?.columns}
+        cards={data?.board?.cards}
+      />
     </Box>
   );
 };

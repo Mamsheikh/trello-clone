@@ -1,0 +1,20 @@
+mutation CreateColumn($boardId: String!) {
+  createColumn(boardId: $boardId) {
+    id
+    boardId
+    boardName
+    columnName
+    sequence
+    cards {
+      id
+      title
+      sequence
+      description
+      type
+      bgColor
+      columnId
+      userId
+      boardId
+    }
+  }
+}

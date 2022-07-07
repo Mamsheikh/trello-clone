@@ -4,13 +4,40 @@
 
 type Board {
   backgroundImage: String
+  cards: [Card]
+  columns: [Column]
   id: String
   name: String
   user: User
 }
 
+type Card {
+  bgColor: String
+  board: Board
+  boardId: String
+  column: Column
+  columnId: String
+  description: String
+  id: String
+  sequence: Int
+  title: String
+  type: String
+  userId: String
+}
+
+type Column {
+  board: Board
+  boardId: String
+  boardName: String
+  cards: [Card]
+  columnName: String
+  id: String
+  sequence: Int
+}
+
 type Mutation {
   createBoard(name: String!): Board
+  createColumn(boardId: String!): Column
   login(input: loginUserInput!): User
   signup(input: createUserInput!): User
   updateBoard(backgroundImage: String, boardId: String!, name: String): Board

@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { objectType } from 'nexus';
+import { Context } from '../../context';
 
 export const Board = objectType({
   name: 'Board',
@@ -15,6 +16,26 @@ export const Board = objectType({
             where: { id: _parent.id },
           })
           .user();
+      },
+    });
+    t.nullable.list.field('columns', {
+      type: 'Column',
+      async resolve(parent, _args, ctx: Context) {
+        return await ctx.prisma.board
+          .findUnique({
+            where: { id: parent.id },
+          })
+          .columns();
+      },
+    });
+    t.nullable.list.field('cards', {
+      type: 'Card',
+      async resolve(parent, _args, ctx: Context) {
+        return await ctx.prisma.board
+          .findUnique({
+            where: { id: parent.id },
+          })
+          .cards();
       },
     });
   },

@@ -32,7 +32,7 @@ model Board {
 
 model Column {
   id         String   @id @default(cuid())
-  Board      Board?   @relation(fields: [boardId], references: [id])
+  board      Board?   @relation(fields: [boardId], references: [id])
   boardId    String?
   boardName  String
   columnName String

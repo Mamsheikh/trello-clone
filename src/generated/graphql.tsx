@@ -18,14 +18,43 @@ export type Scalars = {
 export type Board = {
   __typename?: 'Board';
   backgroundImage?: Maybe<Scalars['String']>;
+  cards?: Maybe<Array<Maybe<Card>>>;
+  columns?: Maybe<Array<Maybe<Column>>>;
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
 
+export type Card = {
+  __typename?: 'Card';
+  bgColor?: Maybe<Scalars['String']>;
+  board?: Maybe<Board>;
+  boardId?: Maybe<Scalars['String']>;
+  column?: Maybe<Column>;
+  columnId?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  sequence?: Maybe<Scalars['Int']>;
+  title?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+};
+
+export type Column = {
+  __typename?: 'Column';
+  board?: Maybe<Board>;
+  boardId?: Maybe<Scalars['String']>;
+  boardName?: Maybe<Scalars['String']>;
+  cards?: Maybe<Array<Maybe<Card>>>;
+  columnName?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  sequence?: Maybe<Scalars['Int']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createBoard?: Maybe<Board>;
+  createColumn?: Maybe<Column>;
   login?: Maybe<User>;
   signup?: Maybe<User>;
   updateBoard?: Maybe<Board>;
@@ -34,6 +63,11 @@ export type Mutation = {
 
 export type MutationCreateBoardArgs = {
   name: Scalars['String'];
+};
+
+
+export type MutationCreateColumnArgs = {
+  boardId: Scalars['String'];
 };
 
 
@@ -100,7 +134,7 @@ export type BoardQueryVariables = Exact<{
 }>;
 
 
-export type BoardQuery = { __typename?: 'Query', board?: { __typename?: 'Board', id?: string | null, name?: string | null, backgroundImage?: string | null, user?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null } | null };
+export type BoardQuery = { __typename?: 'Query', board?: { __typename?: 'Board', id?: string | null, name?: string | null, backgroundImage?: string | null, user?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null, columns?: Array<{ __typename?: 'Column', id?: string | null, boardId?: string | null, boardName?: string | null, columnName?: string | null, sequence?: number | null } | null> | null, cards?: Array<{ __typename?: 'Card', id?: string | null, title?: string | null, boardId?: string | null, sequence?: number | null, description?: string | null, type?: string | null, bgColor?: string | null, columnId?: string | null, userId?: string | null } | null> | null } | null };
 
 export type UpdateBoardMutationVariables = Exact<{
   boardId: Scalars['String'];
@@ -110,6 +144,13 @@ export type UpdateBoardMutationVariables = Exact<{
 
 
 export type UpdateBoardMutation = { __typename?: 'Mutation', updateBoard?: { __typename?: 'Board', id?: string | null, name?: string | null, backgroundImage?: string | null, user?: { __typename?: 'User', email?: string | null, fullName?: string | null, id?: string | null } | null } | null };
+
+export type CreateColumnMutationVariables = Exact<{
+  boardId: Scalars['String'];
+}>;
+
+
+export type CreateColumnMutation = { __typename?: 'Mutation', createColumn?: { __typename?: 'Column', id?: string | null, boardId?: string | null, boardName?: string | null, columnName?: string | null, sequence?: number | null, cards?: Array<{ __typename?: 'Card', id?: string | null, title?: string | null, sequence?: number | null, description?: string | null, type?: string | null, bgColor?: string | null, columnId?: string | null, userId?: string | null, boardId?: string | null } | null> | null } | null };
 
 export type SignupMutationVariables = Exact<{
   input: CreateUserInput;
@@ -218,6 +259,24 @@ export const BoardDocument = gql`
       fullName
       email
     }
+    columns {
+      id
+      boardId
+      boardName
+      columnName
+      sequence
+    }
+    cards {
+      id
+      title
+      boardId
+      sequence
+      description
+      type
+      bgColor
+      columnId
+      userId
+    }
   }
 }
     `;
@@ -291,6 +350,54 @@ export function useUpdateBoardMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UpdateBoardMutationHookResult = ReturnType<typeof useUpdateBoardMutation>;
 export type UpdateBoardMutationResult = Apollo.MutationResult<UpdateBoardMutation>;
 export type UpdateBoardMutationOptions = Apollo.BaseMutationOptions<UpdateBoardMutation, UpdateBoardMutationVariables>;
+export const CreateColumnDocument = gql`
+    mutation CreateColumn($boardId: String!) {
+  createColumn(boardId: $boardId) {
+    id
+    boardId
+    boardName
+    columnName
+    sequence
+    cards {
+      id
+      title
+      sequence
+      description
+      type
+      bgColor
+      columnId
+      userId
+      boardId
+    }
+  }
+}
+    `;
+export type CreateColumnMutationFn = Apollo.MutationFunction<CreateColumnMutation, CreateColumnMutationVariables>;
+
+/**
+ * __useCreateColumnMutation__
+ *
+ * To run a mutation, you first call `useCreateColumnMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateColumnMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createColumnMutation, { data, loading, error }] = useCreateColumnMutation({
+ *   variables: {
+ *      boardId: // value for 'boardId'
+ *   },
+ * });
+ */
+export function useCreateColumnMutation(baseOptions?: Apollo.MutationHookOptions<CreateColumnMutation, CreateColumnMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateColumnMutation, CreateColumnMutationVariables>(CreateColumnDocument, options);
+      }
+export type CreateColumnMutationHookResult = ReturnType<typeof useCreateColumnMutation>;
+export type CreateColumnMutationResult = Apollo.MutationResult<CreateColumnMutation>;
+export type CreateColumnMutationOptions = Apollo.BaseMutationOptions<CreateColumnMutation, CreateColumnMutationVariables>;
 export const SignupDocument = gql`
     mutation Signup($input: createUserInput!) {
   signup(input: $input) {
