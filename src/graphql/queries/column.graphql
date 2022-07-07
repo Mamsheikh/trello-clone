@@ -18,3 +18,24 @@ mutation CreateColumn($boardId: String!) {
     }
   }
 }
+
+mutation UpdateColumnName($name: String!, $columnId: String!) {
+  updateColumnName(name: $name, columnId: $columnId) {
+    id
+    boardId
+    boardName
+    columnName
+    sequence
+    cards {
+      id
+      title
+      sequence
+      description
+      type
+      bgColor
+      columnId
+      userId
+      boardId
+    }
+  }
+}

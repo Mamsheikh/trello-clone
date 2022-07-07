@@ -37,10 +37,12 @@ type Column {
 
 type Mutation {
   createBoard(name: String!): Board
+  createCard(boardId: String!, columnId: String!): Card
   createColumn(boardId: String!): Column
   login(input: loginUserInput!): User
   signup(input: createUserInput!): User
   updateBoard(backgroundImage: String, boardId: String!, name: String): Board
+  updateColumnName(columnId: String!, name: String!): Column
 }
 
 type Query {

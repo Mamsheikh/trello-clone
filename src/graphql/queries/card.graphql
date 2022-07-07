@@ -1,0 +1,13 @@
+mutation CreateCard($columnId: String!, $boardId: String!) {
+  createCard(columnId: $columnId, boardId: $boardId) {
+    id
+    boardId
+    title
+    sequence
+    description
+    type
+    bgColor
+    columnId
+    userId
+  }
+}

@@ -43,3 +43,34 @@ export const createColumnMutation = extendType({
     });
   },
 });
+
+export const updateColumnName = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('updateColumnName', {
+      type: 'Column',
+      args: {
+        name: nonNull(stringArg()),
+        columnId: nonNull(stringArg()),
+      },
+      async resolve(_parent, args, ctx: Context) {
+        const decodedJwt = await isAuth(ctx.req);
+        const column = await ctx.prisma.column.findFirst({
+          where: { id: args.columnId },
+          select: { board: true, id: true },
+        });
+
+        if (column.board.userId !== decodedJwt.userId) {
+          throw new Error('not authorized');
+        }
+
+        return await ctx.prisma.column.update({
+          where: { id: args.columnId },
+          data: {
+            columnName: args.name,
+          },
+        });
+      },
+    });
+  },
+});

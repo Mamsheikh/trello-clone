@@ -14,14 +14,19 @@ import {
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { useDispatch } from 'react-redux';
 import { GrDrag } from 'react-icons/gr';
 
 import debounce from 'lodash.debounce';
 
 import Cards from './cards';
 import { CardDetail } from '../../../types/cards';
-import { Card, Column } from '../../../generated/graphql';
+import {
+  BoardDocument,
+  Card,
+  Column,
+  useCreateCardMutation,
+  useUpdateColumnNameMutation,
+} from '../../../generated/graphql';
 
 interface ColumnProps {
   column: Column;
@@ -39,10 +44,11 @@ const SingleColumn: React.FC<ColumnProps> = ({
 }): JSX.Element => {
   const [showEditBox, setEditBoxVisibility] = useState<boolean>(false);
   //   const cardRequest = useAppSelector((state) => state.cards.isRequesting);
-
+  const [updateColumnName] = useUpdateColumnNameMutation();
+  const [createCard] = useCreateCardMutation();
   const [columnName, setColumnName] = useState<string>(column.columnName);
   const cardsInSortedSequence = cards.sort(
-    (cardA: CardDetail, cardB: CardDetail) => cardA.sequence - cardB.sequence
+    (cardA: Card, cardB: Card) => cardA.sequence - cardB.sequence
   );
 
   const loadColumnTitle = (draggableProps) => {
@@ -86,6 +92,15 @@ const SingleColumn: React.FC<ColumnProps> = ({
 
   const handleCardAdd = async () => {
     // await dispatch(addCard(column._id));
+    await createCard({
+      variables: {
+        columnId: column.id,
+        boardId: column.boardId,
+      },
+      refetchQueries: [
+        { query: BoardDocument, variables: { boardId: column.boardId } },
+      ],
+    });
     // await dispatch(fetchCards());
   };
 
@@ -105,16 +120,21 @@ const SingleColumn: React.FC<ColumnProps> = ({
   );
 
   const nameChange = async (value) => {
-    const data = {
-      columnName: value,
-      columnId: column._id,
-    };
-
+    // const data = {
+    //   columnName: value,
+    //   columnId: column._id,
+    // };
+    await updateColumnName({
+      variables: {
+        columnId: id,
+        name: value,
+      },
+    });
     // await dispatch(updateColumn(data));
   };
 
   return (
-    <Draggable draggableId={column._id} index={index} key={column._id}>
+    <Draggable draggableId={column.id} index={index} key={column.id}>
       {(provided) => (
         <Box
           key={index}
@@ -158,7 +178,7 @@ const SingleColumn: React.FC<ColumnProps> = ({
                 </Menu>
               </Box>
             </Box>
-            <Droppable droppableId={column._id} type='card'>
+            <Droppable droppableId={column.id} type='card'>
               {(provided) => (
                 // 2px height is needed to make the drop work when there is no card.
                 <Box

@@ -2,20 +2,21 @@ import React, { FC } from 'react';
 import { Box, Badge, Avatar } from '@chakra-ui/react';
 import { Draggable } from 'react-beautiful-dnd';
 import { CardDetail } from '../../../types/cards';
+import { Card } from '../../../generated/graphql';
 // import { CardDetail } from '@/src/types/cards';
 // import { useAppSelector } from '@/src/hooks';
 
 type Props = {
   showCardDetail: (cardId: string) => void;
   cardIndex: number;
-  card: CardDetail;
+  card: Card;
 };
 
-const Card: FC<Props> = ({ cardIndex, showCardDetail, card }) => {
+const SingleCard: FC<Props> = ({ cardIndex, showCardDetail, card }) => {
   //   const users = useAppSelector((state) => state.users.users);
 
   const loadAssignedToUser = () => {
-    if (!card.assignedTo) return;
+    if (!card) return;
 
     // const user = users.filter((user) => user._id === card.assignedTo);
 
@@ -28,7 +29,7 @@ const Card: FC<Props> = ({ cardIndex, showCardDetail, card }) => {
 
   return (
     // https://github.com/atlassian/react-beautiful-dnd/issues/1767
-    <Draggable draggableId={card._id} index={cardIndex} key={card._id}>
+    <Draggable draggableId={card.id} index={cardIndex} key={card.id}>
       {(provided) => (
         <Box
           {...provided.draggableProps}
@@ -36,7 +37,7 @@ const Card: FC<Props> = ({ cardIndex, showCardDetail, card }) => {
           ref={provided.innerRef}
           m='5px'
           p='10px'
-          id={card._id}
+          id={card.id}
           minHeight='80px'
           borderWidth='1px'
           bg='white'
@@ -46,11 +47,11 @@ const Card: FC<Props> = ({ cardIndex, showCardDetail, card }) => {
           _hover={{
             backgroundColor: 'lightblue',
           }}
-          onClick={() => showCardDetail(card._id)}
+          onClick={() => showCardDetail(card.id)}
         >
-          {card.label && (
-            <Badge bg={card.label.type} color='white'>
-              {card.label.type}
+          {card.type && (
+            <Badge bg={card.type} color='white'>
+              {card.type}
             </Badge>
           )}
           <p>{card.title}</p>
@@ -61,4 +62,4 @@ const Card: FC<Props> = ({ cardIndex, showCardDetail, card }) => {
   );
 };
 
-export default Card;
+export default SingleCard;
