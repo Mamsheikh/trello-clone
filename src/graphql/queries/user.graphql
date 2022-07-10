@@ -13,3 +13,11 @@ mutation Login($input: loginUserInput!) {
     email
   }
 }
+
+query Me {
+  me {
+    id
+    fullName
+    email
+  }
+}

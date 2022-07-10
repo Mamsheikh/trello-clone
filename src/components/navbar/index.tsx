@@ -1,29 +1,32 @@
 import React, { FC } from 'react';
-import { Button, Image, Flex, Box, Spacer } from '@chakra-ui/react';
+import { Button, Image, Flex, Box, Spacer, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { GrLogout } from 'react-icons/gr';
+import { useMeQuery } from '../../generated/graphql';
 
 type IProps = {
   bg?: string;
 };
 
 const NavBar: FC<IProps> = ({ bg }) => {
+  const { data, loading } = useMeQuery();
   const renderButtons = () => {
-    // if (user?.isValid) {
-    //   return (
-    //     <Button
-    //       fontSize="20"
-    //       color="danger"
-    //       variant="link"
-    //       float="right"
-    //       mr="2"
-    //       pr="2"
-    //       onClick=''>
-    //       <GrLogout />
-    //     </Button>
-    //   );
-    // }
+    if (data?.me) {
+      return (
+        <Button
+          fontSize='20'
+          color='danger'
+          variant='link'
+          float='right'
+          mr='2'
+          pr='2'
+          onClick={() => {}}
+        >
+          <GrLogout />
+        </Button>
+      );
+    }
 
     return (
       <>
@@ -49,7 +52,7 @@ const NavBar: FC<IProps> = ({ bg }) => {
       <Flex>
         <Image height='8' src='/trello-logo.svg' alt='brand logo' m='5'></Image>
         <Spacer />
-        {renderButtons()}
+        {loading ? <Text m='5'>Loading...</Text> : renderButtons()}
       </Flex>
     </Box>
   );

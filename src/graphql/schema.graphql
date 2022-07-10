@@ -51,6 +51,7 @@ type Query {
   board(boardId: String!): Board
   boards: [Board]
   hello: String
+  me: User
 }
 
 type User {
