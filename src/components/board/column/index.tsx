@@ -24,6 +24,7 @@ import {
   useCreateColumnMutation,
 } from '../../../generated/graphql';
 import SingleColumn from './column';
+import CardDetailsModal from './modals/CardDetailModal';
 
 interface Props {
   boardId: string;
@@ -105,7 +106,7 @@ const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
     cardId: string
   ) => {
     const cardsFromColumn = cards.filter(
-      (card) => card.columnId === destinationColumnId && card._id !== cardId
+      (card) => card.columnId === destinationColumnId && card.id !== cardId
     );
     const sortedCards = cardsFromColumn.sort((a, b) => a.sequence - b.sequence);
 
@@ -122,21 +123,21 @@ const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
 
     // This is just for updating local state so that there won't be any lag after saving the sequence and fetching again
     // Now we don't to fetch the cards again
-    await dispatch(updateCardSequenceToLocalState(patchCard));
-    await dispatch(updateCardSequence(patchCard));
+    // await dispatch(updateCardSequenceToLocalState(patchCard));
+    // await dispatch(updateCardSequence(patchCard));
 
     for (let i = destinationIndex; i < sortedCards.length; i++) {
       const card = sortedCards[i];
       sequence += 1;
 
       const patchCard = {
-        _id: card._id,
+        _id: card.id,
         sequence,
         columnId: destinationColumnId,
       };
 
-      await dispatch(updateCardSequenceToLocalState(patchCard));
-      await dispatch(updateCardSequence(patchCard));
+      //   await dispatch(updateCardSequenceToLocalState(patchCard));
+      //   await dispatch(updateCardSequence(patchCard));
     }
   };
 
@@ -222,7 +223,9 @@ const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
           )}
         </Droppable>
       </DragDropContext>
-      {/* {isOpen && <CardDetailsModal isOpen={isOpen} onClose={onClose} card={cardDetail} />} */}
+      {isOpen && (
+        <CardDetailsModal isOpen={isOpen} onClose={onClose} card={cardDetail} />
+      )}
     </Box>
   );
 };

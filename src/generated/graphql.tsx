@@ -59,6 +59,7 @@ export type Mutation = {
   login?: Maybe<User>;
   signup?: Maybe<User>;
   updateBoard?: Maybe<Board>;
+  updateCard?: Maybe<Card>;
   updateColumnName?: Maybe<Column>;
 };
 
@@ -93,6 +94,11 @@ export type MutationUpdateBoardArgs = {
   backgroundImage?: InputMaybe<Scalars['String']>;
   boardId: Scalars['String'];
   name?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationUpdateCardArgs = {
+  input?: InputMaybe<UpdateCardInput>;
 };
 
 
@@ -131,6 +137,15 @@ export type LoginUserInput = {
   password: Scalars['String'];
 };
 
+export type UpdateCardInput = {
+  bgColor?: InputMaybe<Scalars['String']>;
+  cardId: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
+  sequence?: InputMaybe<Scalars['Int']>;
+  title?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
+};
+
 export type CreateBoardMutationVariables = Exact<{
   name: Scalars['String'];
 }>;
@@ -166,6 +181,13 @@ export type CreateCardMutationVariables = Exact<{
 
 
 export type CreateCardMutation = { __typename?: 'Mutation', createCard?: { __typename?: 'Card', id?: string | null, boardId?: string | null, title?: string | null, sequence?: number | null, description?: string | null, type?: string | null, bgColor?: string | null, columnId?: string | null, userId?: string | null } | null };
+
+export type UpdateCardMutationVariables = Exact<{
+  input?: InputMaybe<UpdateCardInput>;
+}>;
+
+
+export type UpdateCardMutation = { __typename?: 'Mutation', updateCard?: { __typename?: 'Card', id?: string | null, boardId?: string | null, title?: string | null, type?: string | null, sequence?: number | null, bgColor?: string | null, description?: string | null, columnId?: string | null, userId?: string | null } | null };
 
 export type CreateColumnMutationVariables = Exact<{
   boardId: Scalars['String'];
@@ -422,6 +444,47 @@ export function useCreateCardMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateCardMutationHookResult = ReturnType<typeof useCreateCardMutation>;
 export type CreateCardMutationResult = Apollo.MutationResult<CreateCardMutation>;
 export type CreateCardMutationOptions = Apollo.BaseMutationOptions<CreateCardMutation, CreateCardMutationVariables>;
+export const UpdateCardDocument = gql`
+    mutation UpdateCard($input: updateCardInput) {
+  updateCard(input: $input) {
+    id
+    boardId
+    title
+    type
+    sequence
+    bgColor
+    description
+    columnId
+    userId
+  }
+}
+    `;
+export type UpdateCardMutationFn = Apollo.MutationFunction<UpdateCardMutation, UpdateCardMutationVariables>;
+
+/**
+ * __useUpdateCardMutation__
+ *
+ * To run a mutation, you first call `useUpdateCardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCardMutation, { data, loading, error }] = useUpdateCardMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateCardMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCardMutation, UpdateCardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCardMutation, UpdateCardMutationVariables>(UpdateCardDocument, options);
+      }
+export type UpdateCardMutationHookResult = ReturnType<typeof useUpdateCardMutation>;
+export type UpdateCardMutationResult = Apollo.MutationResult<UpdateCardMutation>;
+export type UpdateCardMutationOptions = Apollo.BaseMutationOptions<UpdateCardMutation, UpdateCardMutationVariables>;
 export const CreateColumnDocument = gql`
     mutation CreateColumn($boardId: String!) {
   createColumn(boardId: $boardId) {

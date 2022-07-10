@@ -11,3 +11,17 @@ mutation CreateCard($columnId: String!, $boardId: String!) {
     userId
   }
 }
+
+mutation UpdateCard($input: updateCardInput) {
+  updateCard(input: $input) {
+    id
+    boardId
+    title
+    type
+    sequence
+    bgColor
+    description
+    columnId
+    userId
+  }
+}
