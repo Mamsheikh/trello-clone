@@ -18,13 +18,14 @@ const SingleCard: FC<Props> = ({ cardIndex, showCardDetail, card }) => {
   const loadAssignedToUser = () => {
     if (!card) return;
 
-    // const user = users.filter((user) => user._id === card.assignedTo);
+    const user = card.assignedTo;
+    console.log({ user });
 
-    // return (
-    //   <Box display="flex" justifyContent="flex-end">
-    //     <Avatar size="xs" name={user[0]?.fullName} />
-    //   </Box>
-    // );
+    return (
+      <Box display='flex' justifyContent='flex-end'>
+        <Avatar size='xs' name={user?.fullName} />
+      </Box>
+    );
   };
 
   return (
@@ -55,7 +56,7 @@ const SingleCard: FC<Props> = ({ cardIndex, showCardDetail, card }) => {
             </Badge>
           )}
           <p>{card.title}</p>
-          {/* {loadAssignedToUser()} */}
+          {loadAssignedToUser()}
         </Box>
       )}
     </Draggable>

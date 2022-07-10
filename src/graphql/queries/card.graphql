@@ -9,6 +9,11 @@ mutation CreateCard($columnId: String!, $boardId: String!) {
     bgColor
     columnId
     userId
+    assignedTo {
+      id
+      fullName
+      email
+    }
   }
 }
 
@@ -23,5 +28,10 @@ mutation UpdateCard($input: updateCardInput) {
     description
     columnId
     userId
+    assignedTo {
+      id
+      fullName
+      email
+    }
   }
 }

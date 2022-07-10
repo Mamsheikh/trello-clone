@@ -51,6 +51,11 @@ query Board($boardId: String!) {
       bgColor
       columnId
       userId
+      assignedTo {
+        id
+        fullName
+        email
+      }
     }
   }
 }

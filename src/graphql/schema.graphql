@@ -12,6 +12,7 @@ type Board {
 }
 
 type Card {
+  assignedTo: User
   bgColor: String
   board: Board
   boardId: String

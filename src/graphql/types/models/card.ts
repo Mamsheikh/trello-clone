@@ -33,5 +33,15 @@ export const Card = objectType({
           .column();
       },
     });
+    t.field('assignedTo', {
+      type: 'User',
+      async resolve(parent, _args, ctx: Context) {
+        return await ctx.prisma.card
+          .findFirst({
+            where: { id: parent.id },
+          })
+          .assignedTo();
+      },
+    });
   },
 });

@@ -27,6 +27,7 @@ export type Board = {
 
 export type Card = {
   __typename?: 'Card';
+  assignedTo?: Maybe<User>;
   bgColor?: Maybe<Scalars['String']>;
   board?: Maybe<Board>;
   boardId?: Maybe<Scalars['String']>;
@@ -163,7 +164,7 @@ export type BoardQueryVariables = Exact<{
 }>;
 
 
-export type BoardQuery = { __typename?: 'Query', board?: { __typename?: 'Board', id?: string | null, name?: string | null, backgroundImage?: string | null, user?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null, columns?: Array<{ __typename?: 'Column', id?: string | null, boardId?: string | null, boardName?: string | null, columnName?: string | null, sequence?: number | null } | null> | null, cards?: Array<{ __typename?: 'Card', id?: string | null, title?: string | null, boardId?: string | null, sequence?: number | null, description?: string | null, type?: string | null, bgColor?: string | null, columnId?: string | null, userId?: string | null } | null> | null } | null };
+export type BoardQuery = { __typename?: 'Query', board?: { __typename?: 'Board', id?: string | null, name?: string | null, backgroundImage?: string | null, user?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null, columns?: Array<{ __typename?: 'Column', id?: string | null, boardId?: string | null, boardName?: string | null, columnName?: string | null, sequence?: number | null } | null> | null, cards?: Array<{ __typename?: 'Card', id?: string | null, title?: string | null, boardId?: string | null, sequence?: number | null, description?: string | null, type?: string | null, bgColor?: string | null, columnId?: string | null, userId?: string | null, assignedTo?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null } | null> | null } | null };
 
 export type UpdateBoardMutationVariables = Exact<{
   boardId: Scalars['String'];
@@ -180,14 +181,14 @@ export type CreateCardMutationVariables = Exact<{
 }>;
 
 
-export type CreateCardMutation = { __typename?: 'Mutation', createCard?: { __typename?: 'Card', id?: string | null, boardId?: string | null, title?: string | null, sequence?: number | null, description?: string | null, type?: string | null, bgColor?: string | null, columnId?: string | null, userId?: string | null } | null };
+export type CreateCardMutation = { __typename?: 'Mutation', createCard?: { __typename?: 'Card', id?: string | null, boardId?: string | null, title?: string | null, sequence?: number | null, description?: string | null, type?: string | null, bgColor?: string | null, columnId?: string | null, userId?: string | null, assignedTo?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null } | null };
 
 export type UpdateCardMutationVariables = Exact<{
   input?: InputMaybe<UpdateCardInput>;
 }>;
 
 
-export type UpdateCardMutation = { __typename?: 'Mutation', updateCard?: { __typename?: 'Card', id?: string | null, boardId?: string | null, title?: string | null, type?: string | null, sequence?: number | null, bgColor?: string | null, description?: string | null, columnId?: string | null, userId?: string | null } | null };
+export type UpdateCardMutation = { __typename?: 'Mutation', updateCard?: { __typename?: 'Card', id?: string | null, boardId?: string | null, title?: string | null, type?: string | null, sequence?: number | null, bgColor?: string | null, description?: string | null, columnId?: string | null, userId?: string | null, assignedTo?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null } | null };
 
 export type CreateColumnMutationVariables = Exact<{
   boardId: Scalars['String'];
@@ -328,6 +329,11 @@ export const BoardDocument = gql`
       bgColor
       columnId
       userId
+      assignedTo {
+        id
+        fullName
+        email
+      }
     }
   }
 }
@@ -414,6 +420,11 @@ export const CreateCardDocument = gql`
     bgColor
     columnId
     userId
+    assignedTo {
+      id
+      fullName
+      email
+    }
   }
 }
     `;
@@ -456,6 +467,11 @@ export const UpdateCardDocument = gql`
     description
     columnId
     userId
+    assignedTo {
+      id
+      fullName
+      email
+    }
   }
 }
     `;
