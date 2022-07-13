@@ -1,7 +1,7 @@
 import { extendType, nonNull, stringArg, nullable } from 'nexus';
 import { isAuth } from '../../../utils/auth';
 import { Context } from '../../context';
-import { updateCardInput } from '../inputs';
+import { updateCardInput, updateCardSequenceInput } from '../inputs';
 
 export const createCardMutation = extendType({
   type: 'Mutation',
@@ -61,6 +61,35 @@ export const updateCardMutation = extendType({
           where: { id: input.cardId },
           data: {
             bgColor: input.bgColor,
+            type: input.type,
+            title: input.title,
+            description: input.description,
+            sequence: input.sequence,
+          },
+        });
+      },
+    });
+  },
+});
+
+export const updateCardSequenceMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('updateCardSequence', {
+      type: 'Card',
+      args: { input: nullable(updateCardSequenceInput) },
+      async resolve(_parent, { input }, ctx: Context) {
+        // const cards = await ctx.prisma.board
+        //   .findUnique({
+        //     where: { id: input.boardId },
+        //   })
+        //   .cards();
+
+        return await ctx.prisma.card.update({
+          where: { id: input.cardId },
+          data: {
+            bgColor: input.bgColor,
+            columnId: input.columnId,
             type: input.type,
             title: input.title,
             description: input.description,

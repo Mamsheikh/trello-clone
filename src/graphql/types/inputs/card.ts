@@ -11,3 +11,12 @@ export const updateCardInput = inputObjectType({
     t.nullable.int('sequence');
   },
 });
+
+export const updateCardSequenceInput = inputObjectType({
+  name: 'updateCardSequenceInput',
+  definition(t) {
+    t.nullable.string('cardId');
+    t.nonNull.string('columnId');
+    t.nonNull.int('sequence');
+  },
+});

@@ -22,6 +22,8 @@ import {
   Card,
   Column,
   useCreateColumnMutation,
+  useUpdateCardMutation,
+  useUpdateCardSequenceMutation,
 } from '../../../generated/graphql';
 import SingleColumn from './column';
 import CardDetailsModal from './modals/CardDetailModal';
@@ -33,10 +35,7 @@ interface Props {
 }
 
 const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
-  //   const dispatch = useDispatch();
-
-  //   const columns = useAppSelector((state) => state.columns.columns);
-  //   const cards = useAppSelector((state) => state.cards.cards);
+  const [updateCardSequence] = useUpdateCardSequenceMutation();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [cardDetail, setCardDetail] = useState<Card>({
@@ -71,6 +70,7 @@ const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
 
   const onDragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
+    console.log({ destination, source, draggableId, type });
 
     // Don't do anything where there is not destination
     if (!destination) {
@@ -84,6 +84,7 @@ const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
     ) {
       return;
     }
+    // if (destination.droppableId === source.droppableId) return;
 
     // If card is being dragged
     if (type === 'card') {
@@ -108,6 +109,7 @@ const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
     const cardsFromColumn = cards.filter(
       (card) => card.columnId === destinationColumnId && card.id !== cardId
     );
+
     const sortedCards = cardsFromColumn.sort((a, b) => a.sequence - b.sequence);
 
     let sequence =
@@ -125,6 +127,16 @@ const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
     // Now we don't to fetch the cards again
     // await dispatch(updateCardSequenceToLocalState(patchCard));
     // await dispatch(updateCardSequence(patchCard));
+    await updateCardSequence({
+      variables: {
+        input: {
+          cardId: cardId,
+          columnId: destinationColumnId,
+          // boardId: card.boardId,
+          sequence,
+        },
+      },
+    });
 
     for (let i = destinationIndex; i < sortedCards.length; i++) {
       const card = sortedCards[i];
@@ -135,6 +147,16 @@ const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
         sequence,
         columnId: destinationColumnId,
       };
+
+      await updateCardSequence({
+        variables: {
+          input: {
+            cardId: card.id,
+            columnId: destinationColumnId,
+            sequence,
+          },
+        },
+      });
 
       //   await dispatch(updateCardSequenceToLocalState(patchCard));
       //   await dispatch(updateCardSequence(patchCard));
@@ -182,7 +204,7 @@ const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
 
     // Added temporarily to refresh the page on column, otherwise it will not reflect the changes
     // Will be fixed later
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (

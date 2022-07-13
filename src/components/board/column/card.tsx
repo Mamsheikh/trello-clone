@@ -19,7 +19,7 @@ const SingleCard: FC<Props> = ({ cardIndex, showCardDetail, card }) => {
     if (!card) return;
 
     const user = card.assignedTo;
-    console.log({ user });
+    // console.log({ user });
 
     return (
       <Box display='flex' justifyContent='flex-end'>

@@ -44,6 +44,7 @@ type Mutation {
   signup(input: createUserInput!): User
   updateBoard(backgroundImage: String, boardId: String!, name: String): Board
   updateCard(input: updateCardInput): Card
+  updateCardSequence(input: updateCardSequenceInput): Card
   updateColumnName(columnId: String!, name: String!): Column
 }
 
@@ -78,4 +79,10 @@ input updateCardInput {
   sequence: Int
   title: String
   type: String
+}
+
+input updateCardSequenceInput {
+  cardId: String
+  columnId: String!
+  sequence: Int!
 }

@@ -61,6 +61,7 @@ export type Mutation = {
   signup?: Maybe<User>;
   updateBoard?: Maybe<Board>;
   updateCard?: Maybe<Card>;
+  updateCardSequence?: Maybe<Card>;
   updateColumnName?: Maybe<Column>;
 };
 
@@ -100,6 +101,11 @@ export type MutationUpdateBoardArgs = {
 
 export type MutationUpdateCardArgs = {
   input?: InputMaybe<UpdateCardInput>;
+};
+
+
+export type MutationUpdateCardSequenceArgs = {
+  input?: InputMaybe<UpdateCardSequenceInput>;
 };
 
 
@@ -148,6 +154,12 @@ export type UpdateCardInput = {
   type?: InputMaybe<Scalars['String']>;
 };
 
+export type UpdateCardSequenceInput = {
+  cardId?: InputMaybe<Scalars['String']>;
+  columnId: Scalars['String'];
+  sequence: Scalars['Int'];
+};
+
 export type CreateBoardMutationVariables = Exact<{
   name: Scalars['String'];
 }>;
@@ -190,6 +202,13 @@ export type UpdateCardMutationVariables = Exact<{
 
 
 export type UpdateCardMutation = { __typename?: 'Mutation', updateCard?: { __typename?: 'Card', id?: string | null, boardId?: string | null, title?: string | null, type?: string | null, sequence?: number | null, bgColor?: string | null, description?: string | null, columnId?: string | null, userId?: string | null, assignedTo?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null } | null };
+
+export type UpdateCardSequenceMutationVariables = Exact<{
+  input?: InputMaybe<UpdateCardSequenceInput>;
+}>;
+
+
+export type UpdateCardSequenceMutation = { __typename?: 'Mutation', updateCardSequence?: { __typename?: 'Card', id?: string | null, boardId?: string | null, title?: string | null, type?: string | null, sequence?: number | null, bgColor?: string | null, description?: string | null, columnId?: string | null, userId?: string | null, assignedTo?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null } | null };
 
 export type CreateColumnMutationVariables = Exact<{
   boardId: Scalars['String'];
@@ -507,6 +526,52 @@ export function useUpdateCardMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateCardMutationHookResult = ReturnType<typeof useUpdateCardMutation>;
 export type UpdateCardMutationResult = Apollo.MutationResult<UpdateCardMutation>;
 export type UpdateCardMutationOptions = Apollo.BaseMutationOptions<UpdateCardMutation, UpdateCardMutationVariables>;
+export const UpdateCardSequenceDocument = gql`
+    mutation UpdateCardSequence($input: updateCardSequenceInput) {
+  updateCardSequence(input: $input) {
+    id
+    boardId
+    title
+    type
+    sequence
+    bgColor
+    description
+    columnId
+    userId
+    assignedTo {
+      id
+      fullName
+      email
+    }
+  }
+}
+    `;
+export type UpdateCardSequenceMutationFn = Apollo.MutationFunction<UpdateCardSequenceMutation, UpdateCardSequenceMutationVariables>;
+
+/**
+ * __useUpdateCardSequenceMutation__
+ *
+ * To run a mutation, you first call `useUpdateCardSequenceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCardSequenceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCardSequenceMutation, { data, loading, error }] = useUpdateCardSequenceMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateCardSequenceMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCardSequenceMutation, UpdateCardSequenceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCardSequenceMutation, UpdateCardSequenceMutationVariables>(UpdateCardSequenceDocument, options);
+      }
+export type UpdateCardSequenceMutationHookResult = ReturnType<typeof useUpdateCardSequenceMutation>;
+export type UpdateCardSequenceMutationResult = Apollo.MutationResult<UpdateCardSequenceMutation>;
+export type UpdateCardSequenceMutationOptions = Apollo.BaseMutationOptions<UpdateCardSequenceMutation, UpdateCardSequenceMutationVariables>;
 export const CreateColumnDocument = gql`
     mutation CreateColumn($boardId: String!) {
   createColumn(boardId: $boardId) {

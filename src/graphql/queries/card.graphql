@@ -35,3 +35,22 @@ mutation UpdateCard($input: updateCardInput) {
     }
   }
 }
+
+mutation UpdateCardSequence($input: updateCardSequenceInput) {
+  updateCardSequence(input: $input) {
+    id
+    boardId
+    title
+    type
+    sequence
+    bgColor
+    description
+    columnId
+    userId
+    assignedTo {
+      id
+      fullName
+      email
+    }
+  }
+}
