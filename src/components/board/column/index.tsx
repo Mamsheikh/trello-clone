@@ -24,6 +24,7 @@ import {
   useCreateColumnMutation,
   useUpdateCardMutation,
   useUpdateCardSequenceMutation,
+  useUpdateColumnSequenceMutation,
 } from '../../../generated/graphql';
 import SingleColumn from './column';
 import CardDetailsModal from './modals/CardDetailModal';
@@ -36,7 +37,8 @@ interface Props {
 
 const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
   const [updateCardSequence] = useUpdateCardSequenceMutation();
-
+  const [updateColumnSequence] = useUpdateColumnSequenceMutation();
+  console.log('columns', columns);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [cardDetail, setCardDetail] = useState<Card>({
     id: '',
@@ -148,15 +150,15 @@ const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
         columnId: destinationColumnId,
       };
 
-      await updateCardSequence({
-        variables: {
-          input: {
-            cardId: card.id,
-            columnId: destinationColumnId,
-            sequence,
-          },
-        },
-      });
+      // await updateCardSequence({
+      //   variables: {
+      //     input: {
+      //       cardId: card.id,
+      //       columnId: destinationColumnId,
+      //       sequence,
+      //     },
+      //   },
+      // });
 
       //   await dispatch(updateCardSequenceToLocalState(patchCard));
       //   await dispatch(updateCardSequence(patchCard));
@@ -184,6 +186,12 @@ const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
       sequence,
     };
 
+    await updateColumnSequence({
+      variables: {
+        columnId,
+        sequence,
+      },
+    });
     // This is just for updating local state so that there won't be any lag after saving the sequence and fetching again
     // await dispatch(updateColumnSequenceToLocalState(patchColumn));
     // await dispatch(updateColumnSequence(patchColumn));
@@ -197,6 +205,13 @@ const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
         _id: column.id,
         sequence,
       };
+      await updateColumnSequence({
+        variables: {
+          columnId: column.id,
+          sequence,
+        },
+        // refetchQueries: [{ query: BoardDocument, variables: { boardId } }],
+      });
 
       //   await dispatch(updateColumnSequenceToLocalState(patchColumn));
       //   await dispatch(updateColumnSequence(patchColumn));

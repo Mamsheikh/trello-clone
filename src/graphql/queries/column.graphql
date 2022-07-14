@@ -39,3 +39,39 @@ mutation UpdateColumnName($name: String!, $columnId: String!) {
     }
   }
 }
+
+mutation UpdateColumnSequence($columnId: String!, $sequence: Int!) {
+  updateColumnSequence(columnId: $columnId, sequence: $sequence) {
+    id
+    name
+    backgroundImage
+    user {
+      id
+      fullName
+      email
+    }
+    columns {
+      id
+      boardId
+      boardName
+      columnName
+      sequence
+    }
+    cards {
+      id
+      title
+      boardId
+      sequence
+      description
+      type
+      bgColor
+      columnId
+      userId
+      assignedTo {
+        id
+        fullName
+        email
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { extendType, nonNull, stringArg } from 'nexus';
+import { extendType, intArg, nonNull, stringArg } from 'nexus';
 import { isAuth } from '../../../utils/auth';
 import { Context } from '../../context';
 
@@ -70,6 +70,26 @@ export const updateColumnName = extendType({
             columnName: args.name,
           },
         });
+      },
+    });
+  },
+});
+
+export const updateColumnSequenceMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('updateColumnSequence', {
+      type: 'Board',
+      args: { columnId: nonNull(stringArg()), sequence: nonNull(intArg()) },
+      async resolve(_parent, { columnId, sequence }, ctx: Context) {
+        return await ctx.prisma.column
+          .update({
+            where: { id: columnId },
+            data: {
+              sequence,
+            },
+          })
+          .board();
       },
     });
   },

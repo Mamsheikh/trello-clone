@@ -1,4 +1,4 @@
-import { extendType, nonNull, stringArg, nullable } from 'nexus';
+import { extendType, nonNull, stringArg, nullable, intArg } from 'nexus';
 import { isAuth } from '../../../utils/auth';
 import { Context } from '../../context';
 import { updateCardInput, updateCardSequenceInput } from '../inputs';

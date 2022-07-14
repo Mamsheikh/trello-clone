@@ -46,6 +46,7 @@ type Mutation {
   updateCard(input: updateCardInput): Card
   updateCardSequence(input: updateCardSequenceInput): Card
   updateColumnName(columnId: String!, name: String!): Column
+  updateColumnSequence(columnId: String!, sequence: Int!): Board
 }
 
 type Query {
