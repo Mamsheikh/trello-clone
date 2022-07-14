@@ -12,9 +12,6 @@ import {
 } from '@chakra-ui/react';
 import { MdLabelOutline } from 'react-icons/md';
 import { useUpdateCardMutation } from '../../../../generated/graphql';
-// import { updateCard } from '@/src/slices/cards';
-// import { useDispatch } from 'react-redux';
-// import { Label } from '@/src/types/cards';
 
 type IProps = {
   id: string;

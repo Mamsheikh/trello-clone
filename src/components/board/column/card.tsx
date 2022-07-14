@@ -1,10 +1,7 @@
 import React, { FC } from 'react';
 import { Box, Badge, Avatar } from '@chakra-ui/react';
 import { Draggable } from 'react-beautiful-dnd';
-import { CardDetail } from '../../../types/cards';
 import { Card } from '../../../generated/graphql';
-// import { CardDetail } from '@/src/types/cards';
-// import { useAppSelector } from '@/src/hooks';
 
 type Props = {
   showCardDetail: (cardId: string) => void;
@@ -13,13 +10,10 @@ type Props = {
 };
 
 const SingleCard: FC<Props> = ({ cardIndex, showCardDetail, card }) => {
-  //   const users = useAppSelector((state) => state.users.users);
-
   const loadAssignedToUser = () => {
     if (!card) return;
 
     const user = card.assignedTo;
-    // console.log({ user });
 
     return (
       <Box display='flex' justifyContent='flex-end'>

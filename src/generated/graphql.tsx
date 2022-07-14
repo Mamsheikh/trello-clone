@@ -57,6 +57,9 @@ export type Mutation = {
   createBoard?: Maybe<Board>;
   createCard?: Maybe<Card>;
   createColumn?: Maybe<Column>;
+  deleteBoard?: Maybe<Board>;
+  deleteCard?: Maybe<Card>;
+  deleteColumn?: Maybe<Column>;
   login?: Maybe<User>;
   signup?: Maybe<User>;
   updateBoard?: Maybe<Board>;
@@ -80,6 +83,21 @@ export type MutationCreateCardArgs = {
 
 export type MutationCreateColumnArgs = {
   boardId: Scalars['String'];
+};
+
+
+export type MutationDeleteBoardArgs = {
+  boardId: Scalars['String'];
+};
+
+
+export type MutationDeleteCardArgs = {
+  cardId: Scalars['String'];
+};
+
+
+export type MutationDeleteColumnArgs = {
+  columnId: Scalars['String'];
 };
 
 
@@ -195,6 +213,13 @@ export type UpdateBoardMutationVariables = Exact<{
 
 export type UpdateBoardMutation = { __typename?: 'Mutation', updateBoard?: { __typename?: 'Board', id?: string | null, name?: string | null, backgroundImage?: string | null, user?: { __typename?: 'User', email?: string | null, fullName?: string | null, id?: string | null } | null } | null };
 
+export type DeleteBoardMutationVariables = Exact<{
+  boardId: Scalars['String'];
+}>;
+
+
+export type DeleteBoardMutation = { __typename?: 'Mutation', deleteBoard?: { __typename?: 'Board', id?: string | null, name?: string | null, backgroundImage?: string | null, user?: { __typename?: 'User', email?: string | null, fullName?: string | null, id?: string | null } | null } | null };
+
 export type CreateCardMutationVariables = Exact<{
   columnId: Scalars['String'];
   boardId: Scalars['String'];
@@ -216,6 +241,13 @@ export type UpdateCardSequenceMutationVariables = Exact<{
 
 
 export type UpdateCardSequenceMutation = { __typename?: 'Mutation', updateCardSequence?: { __typename?: 'Card', id?: string | null, boardId?: string | null, title?: string | null, type?: string | null, sequence?: number | null, bgColor?: string | null, description?: string | null, columnId?: string | null, userId?: string | null, assignedTo?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null } | null };
+
+export type DeleteCardMutationVariables = Exact<{
+  cardId: Scalars['String'];
+}>;
+
+
+export type DeleteCardMutation = { __typename?: 'Mutation', deleteCard?: { __typename?: 'Card', id?: string | null, boardId?: string | null, title?: string | null, type?: string | null, sequence?: number | null, bgColor?: string | null, description?: string | null, columnId?: string | null, userId?: string | null, assignedTo?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null } | null };
 
 export type CreateColumnMutationVariables = Exact<{
   boardId: Scalars['String'];
@@ -239,6 +271,13 @@ export type UpdateColumnSequenceMutationVariables = Exact<{
 
 
 export type UpdateColumnSequenceMutation = { __typename?: 'Mutation', updateColumnSequence?: { __typename?: 'Board', id?: string | null, name?: string | null, backgroundImage?: string | null, user?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null, columns?: Array<{ __typename?: 'Column', id?: string | null, boardId?: string | null, boardName?: string | null, columnName?: string | null, sequence?: number | null } | null> | null, cards?: Array<{ __typename?: 'Card', id?: string | null, title?: string | null, boardId?: string | null, sequence?: number | null, description?: string | null, type?: string | null, bgColor?: string | null, columnId?: string | null, userId?: string | null, assignedTo?: { __typename?: 'User', id?: string | null, fullName?: string | null, email?: string | null } | null } | null> | null } | null };
+
+export type DeleteColumnMutationVariables = Exact<{
+  columnId: Scalars['String'];
+}>;
+
+
+export type DeleteColumnMutation = { __typename?: 'Mutation', deleteColumn?: { __typename?: 'Column', id?: string | null, boardId?: string | null, boardName?: string | null, columnName?: string | null, sequence?: number | null, cards?: Array<{ __typename?: 'Card', id?: string | null, title?: string | null, sequence?: number | null, description?: string | null, type?: string | null, bgColor?: string | null, columnId?: string | null, userId?: string | null, boardId?: string | null } | null> | null } | null };
 
 export type SignupMutationVariables = Exact<{
   input: CreateUserInput;
@@ -448,6 +487,46 @@ export function useUpdateBoardMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UpdateBoardMutationHookResult = ReturnType<typeof useUpdateBoardMutation>;
 export type UpdateBoardMutationResult = Apollo.MutationResult<UpdateBoardMutation>;
 export type UpdateBoardMutationOptions = Apollo.BaseMutationOptions<UpdateBoardMutation, UpdateBoardMutationVariables>;
+export const DeleteBoardDocument = gql`
+    mutation DeleteBoard($boardId: String!) {
+  deleteBoard(boardId: $boardId) {
+    id
+    name
+    backgroundImage
+    user {
+      email
+      fullName
+      id
+    }
+  }
+}
+    `;
+export type DeleteBoardMutationFn = Apollo.MutationFunction<DeleteBoardMutation, DeleteBoardMutationVariables>;
+
+/**
+ * __useDeleteBoardMutation__
+ *
+ * To run a mutation, you first call `useDeleteBoardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBoardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteBoardMutation, { data, loading, error }] = useDeleteBoardMutation({
+ *   variables: {
+ *      boardId: // value for 'boardId'
+ *   },
+ * });
+ */
+export function useDeleteBoardMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBoardMutation, DeleteBoardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteBoardMutation, DeleteBoardMutationVariables>(DeleteBoardDocument, options);
+      }
+export type DeleteBoardMutationHookResult = ReturnType<typeof useDeleteBoardMutation>;
+export type DeleteBoardMutationResult = Apollo.MutationResult<DeleteBoardMutation>;
+export type DeleteBoardMutationOptions = Apollo.BaseMutationOptions<DeleteBoardMutation, DeleteBoardMutationVariables>;
 export const CreateCardDocument = gql`
     mutation CreateCard($columnId: String!, $boardId: String!) {
   createCard(columnId: $columnId, boardId: $boardId) {
@@ -587,6 +666,52 @@ export function useUpdateCardSequenceMutation(baseOptions?: Apollo.MutationHookO
 export type UpdateCardSequenceMutationHookResult = ReturnType<typeof useUpdateCardSequenceMutation>;
 export type UpdateCardSequenceMutationResult = Apollo.MutationResult<UpdateCardSequenceMutation>;
 export type UpdateCardSequenceMutationOptions = Apollo.BaseMutationOptions<UpdateCardSequenceMutation, UpdateCardSequenceMutationVariables>;
+export const DeleteCardDocument = gql`
+    mutation DeleteCard($cardId: String!) {
+  deleteCard(cardId: $cardId) {
+    id
+    boardId
+    title
+    type
+    sequence
+    bgColor
+    description
+    columnId
+    userId
+    assignedTo {
+      id
+      fullName
+      email
+    }
+  }
+}
+    `;
+export type DeleteCardMutationFn = Apollo.MutationFunction<DeleteCardMutation, DeleteCardMutationVariables>;
+
+/**
+ * __useDeleteCardMutation__
+ *
+ * To run a mutation, you first call `useDeleteCardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCardMutation, { data, loading, error }] = useDeleteCardMutation({
+ *   variables: {
+ *      cardId: // value for 'cardId'
+ *   },
+ * });
+ */
+export function useDeleteCardMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCardMutation, DeleteCardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCardMutation, DeleteCardMutationVariables>(DeleteCardDocument, options);
+      }
+export type DeleteCardMutationHookResult = ReturnType<typeof useDeleteCardMutation>;
+export type DeleteCardMutationResult = Apollo.MutationResult<DeleteCardMutation>;
+export type DeleteCardMutationOptions = Apollo.BaseMutationOptions<DeleteCardMutation, DeleteCardMutationVariables>;
 export const CreateColumnDocument = gql`
     mutation CreateColumn($boardId: String!) {
   createColumn(boardId: $boardId) {
@@ -748,6 +873,54 @@ export function useUpdateColumnSequenceMutation(baseOptions?: Apollo.MutationHoo
 export type UpdateColumnSequenceMutationHookResult = ReturnType<typeof useUpdateColumnSequenceMutation>;
 export type UpdateColumnSequenceMutationResult = Apollo.MutationResult<UpdateColumnSequenceMutation>;
 export type UpdateColumnSequenceMutationOptions = Apollo.BaseMutationOptions<UpdateColumnSequenceMutation, UpdateColumnSequenceMutationVariables>;
+export const DeleteColumnDocument = gql`
+    mutation DeleteColumn($columnId: String!) {
+  deleteColumn(columnId: $columnId) {
+    id
+    boardId
+    boardName
+    columnName
+    sequence
+    cards {
+      id
+      title
+      sequence
+      description
+      type
+      bgColor
+      columnId
+      userId
+      boardId
+    }
+  }
+}
+    `;
+export type DeleteColumnMutationFn = Apollo.MutationFunction<DeleteColumnMutation, DeleteColumnMutationVariables>;
+
+/**
+ * __useDeleteColumnMutation__
+ *
+ * To run a mutation, you first call `useDeleteColumnMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteColumnMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteColumnMutation, { data, loading, error }] = useDeleteColumnMutation({
+ *   variables: {
+ *      columnId: // value for 'columnId'
+ *   },
+ * });
+ */
+export function useDeleteColumnMutation(baseOptions?: Apollo.MutationHookOptions<DeleteColumnMutation, DeleteColumnMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteColumnMutation, DeleteColumnMutationVariables>(DeleteColumnDocument, options);
+      }
+export type DeleteColumnMutationHookResult = ReturnType<typeof useDeleteColumnMutation>;
+export type DeleteColumnMutationResult = Apollo.MutationResult<DeleteColumnMutation>;
+export type DeleteColumnMutationOptions = Apollo.BaseMutationOptions<DeleteColumnMutation, DeleteColumnMutationVariables>;
 export const SignupDocument = gql`
     mutation Signup($input: createUserInput!) {
   signup(input: $input) {

@@ -40,6 +40,9 @@ type Mutation {
   createBoard(name: String!): Board
   createCard(boardId: String!, columnId: String!): Card
   createColumn(boardId: String!): Column
+  deleteBoard(boardId: String!): Board
+  deleteCard(cardId: String!): Card
+  deleteColumn(columnId: String!): Column
   login(input: loginUserInput!): User
   signup(input: createUserInput!): User
   updateBoard(backgroundImage: String, boardId: String!, name: String): Board

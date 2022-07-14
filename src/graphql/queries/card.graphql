@@ -54,3 +54,22 @@ mutation UpdateCardSequence($input: updateCardSequenceInput) {
     }
   }
 }
+
+mutation DeleteCard($cardId: String!) {
+  deleteCard(cardId: $cardId) {
+    id
+    boardId
+    title
+    type
+    sequence
+    bgColor
+    description
+    columnId
+    userId
+    assignedTo {
+      id
+      fullName
+      email
+    }
+  }
+}

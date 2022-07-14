@@ -94,3 +94,27 @@ export const updateColumnSequenceMutation = extendType({
     });
   },
 });
+
+export const deleteColumnMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('deleteColumn', {
+      type: 'Column',
+      args: { columnId: nonNull(stringArg()) },
+      async resolve(_parent, { columnId }, ctx: Context) {
+        const decodedJwt = await isAuth(ctx.req);
+
+        const column = await ctx.prisma.column.findFirstOrThrow({
+          where: { id: columnId },
+          select: { board: true },
+        });
+        if (column.board.userId !== decodedJwt.userId) {
+          throw new Error('not authorized');
+        }
+        return await ctx.prisma.column.delete({
+          where: { id: columnId },
+        });
+      },
+    });
+  },
+});

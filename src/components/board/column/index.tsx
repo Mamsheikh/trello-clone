@@ -38,7 +38,6 @@ interface Props {
 const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
   const [updateCardSequence] = useUpdateCardSequenceMutation();
   const [updateColumnSequence] = useUpdateColumnSequenceMutation();
-  console.log('columns', columns);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [cardDetail, setCardDetail] = useState<Card>({
     id: '',
@@ -72,7 +71,6 @@ const BoardColumns: FC<Props> = ({ cards, columns, boardId }): JSX.Element => {
 
   const onDragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
-    console.log({ destination, source, draggableId, type });
 
     // Don't do anything where there is not destination
     if (!destination) {

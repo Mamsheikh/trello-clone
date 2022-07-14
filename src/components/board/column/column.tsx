@@ -25,6 +25,7 @@ import {
   Card,
   Column,
   useCreateCardMutation,
+  useDeleteColumnMutation,
   useUpdateColumnNameMutation,
 } from '../../../generated/graphql';
 
@@ -43,7 +44,7 @@ const SingleColumn: React.FC<ColumnProps> = ({
   cards,
 }): JSX.Element => {
   const [showEditBox, setEditBoxVisibility] = useState<boolean>(false);
-  //   const cardRequest = useAppSelector((state) => state.cards.isRequesting);
+  const [deleteColumn] = useDeleteColumnMutation();
   const [updateColumnName] = useUpdateColumnNameMutation();
   const [createCard] = useCreateCardMutation();
   const [columnName, setColumnName] = useState<string>(column.columnName);
@@ -110,8 +111,11 @@ const SingleColumn: React.FC<ColumnProps> = ({
   };
 
   const handleColumnDelete = async () => {
-    // await dispatch(deleteColumn(id));
-    // await dispatch(fetchColumns());
+    await deleteColumn({
+      variables: {
+        columnId: id,
+      },
+    });
   };
 
   const handleColumnNameChange = useCallback(
@@ -120,17 +124,12 @@ const SingleColumn: React.FC<ColumnProps> = ({
   );
 
   const nameChange = async (value) => {
-    // const data = {
-    //   columnName: value,
-    //   columnId: column._id,
-    // };
     await updateColumnName({
       variables: {
         columnId: id,
         name: value,
       },
     });
-    // await dispatch(updateColumn(data));
   };
 
   return (

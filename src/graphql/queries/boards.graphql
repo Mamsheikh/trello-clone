@@ -80,3 +80,16 @@ mutation UpdateBoard(
     }
   }
 }
+
+mutation DeleteBoard($boardId: String!) {
+  deleteBoard(boardId: $boardId) {
+    id
+    name
+    backgroundImage
+    user {
+      email
+      fullName
+      id
+    }
+  }
+}

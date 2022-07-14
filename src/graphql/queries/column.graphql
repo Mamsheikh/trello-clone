@@ -75,3 +75,24 @@ mutation UpdateColumnSequence($columnId: String!, $sequence: Int!) {
     }
   }
 }
+
+mutation DeleteColumn($columnId: String!) {
+  deleteColumn(columnId: $columnId) {
+    id
+    boardId
+    boardName
+    columnName
+    sequence
+    cards {
+      id
+      title
+      sequence
+      description
+      type
+      bgColor
+      columnId
+      userId
+      boardId
+    }
+  }
+}

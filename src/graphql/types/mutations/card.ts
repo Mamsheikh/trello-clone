@@ -100,3 +100,26 @@ export const updateCardSequenceMutation = extendType({
     });
   },
 });
+
+export const deleteCardMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('deleteCard', {
+      type: 'Card',
+      args: { cardId: nonNull(stringArg()) },
+      async resolve(_parent, { cardId }, ctx: Context) {
+        const decodedJwt = await isAuth(ctx.req);
+
+        const card = await ctx.prisma.card.findFirstOrThrow({
+          where: { id: cardId },
+        });
+        if (card.userId !== decodedJwt.userId) {
+          throw new Error('not authorized');
+        }
+        return await ctx.prisma.card.delete({
+          where: { id: cardId },
+        });
+      },
+    });
+  },
+});

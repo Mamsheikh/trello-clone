@@ -58,3 +58,27 @@ export const updateBoardMutation = extendType({
     });
   },
 });
+
+export const deleteBoardMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('deleteBoard', {
+      type: 'Board',
+      args: { boardId: nonNull(stringArg()) },
+      async resolve(_parent, { boardId }, ctx: Context) {
+        const decodedJwt = await isAuth(ctx.req);
+
+        const board = await ctx.prisma.board.findFirstOrThrow({
+          where: { id: boardId },
+          // select: { board: true },
+        });
+        if (board.userId !== decodedJwt.userId) {
+          throw new Error('not authorized');
+        }
+        return await ctx.prisma.board.delete({
+          where: { id: boardId },
+        });
+      },
+    });
+  },
+});

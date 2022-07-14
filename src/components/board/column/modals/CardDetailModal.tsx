@@ -15,22 +15,21 @@ import {
   MenuList,
   Badge,
 } from '@chakra-ui/react';
-import { useDispatch } from 'react-redux';
-// import { CardDetail } from '@/src/types/cards';
-// import { deleteCard, fetchCards, updateCard } from '@/src/slices/cards';
-// import { useAppSelector } from '@/src/hooks';
+
 import {
   AiOutlineDelete,
   AiOutlineClose,
   AiOutlineLaptop,
 } from 'react-icons/ai';
 import { GrTextAlignFull } from 'react-icons/gr';
-// import CardLabel from '@/src/components/board/columns/modals/card-labels-menu';
-// import QuillEditor from '@/src/components/quill-editor';
 import { AiOutlineDown } from 'react-icons/ai';
 import QuillEditor from '../../../QuilEditor';
 import CardLabel from './CardLable';
-import { Card, useUpdateCardMutation } from '../../../../generated/graphql';
+import {
+  Card,
+  useDeleteCardMutation,
+  useUpdateCardMutation,
+} from '../../../../generated/graphql';
 
 type Props = {
   onClose: () => void;
@@ -40,25 +39,21 @@ type Props = {
 
 const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
   const [updateCard, { loading }] = useUpdateCardMutation();
+  const [deleteCard] = useDeleteCardMutation();
   const [title, setTitle] = useState(card?.title);
   const [description, setDescription] = useState(card?.description);
 
   const handleCardDelete = async () => {
-    // await dispatch(deleteCard(card._id));
-    // await dispatch(fetchCards());
+    await deleteCard({
+      variables: {
+        cardId: card.id,
+      },
+    });
 
     onClose();
   };
 
   const handleModalClose = async () => {
-    // const data = {
-    //   _id: card.id,
-    //   title,
-    //   description,
-    //   columnId: card.columnId,
-    //   assignedTo: assigned
-    // };
-
     await updateCard({
       variables: {
         input: {

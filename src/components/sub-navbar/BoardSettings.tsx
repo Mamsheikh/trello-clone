@@ -22,7 +22,11 @@ import {
 } from '@chakra-ui/react';
 import { AiFillSetting, AiOutlineDelete, AiOutlineCheck } from 'react-icons/ai';
 import { useRouter } from 'next/router';
-import { Board, useUpdateBoardMutation } from '../../generated/graphql';
+import {
+  Board,
+  useDeleteBoardMutation,
+  useUpdateBoardMutation,
+} from '../../generated/graphql';
 
 interface BoardSettingsProps {
   board: Board;
@@ -31,11 +35,8 @@ interface BoardSettingsProps {
 const BoardSettings: React.FC<BoardSettingsProps> = ({ board }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [updateBoard] = useUpdateBoardMutation();
+  const [deleteBoard, { loading }] = useDeleteBoardMutation();
   const [name, setName] = useState('');
-  //   const board = useAppSelector((state) => state.board.board);
-  //   const boardDetail = useAppSelector((state) => state.board);
-  //   const boardDelete = useAppSelector((state) => state.board.isLoading);
-  //   const dispatch = useDispatch();
   const router = useRouter();
 
   const handleSave = async () => {
@@ -50,10 +51,12 @@ const BoardSettings: React.FC<BoardSettingsProps> = ({ board }) => {
   };
 
   const handleDelete = async () => {
-    // await dispatch(deleteBoard());
-    // if (boardDetail.status === 'success') {
-    //   router.push('/boards');
-    // }
+    await deleteBoard({
+      variables: {
+        boardId: board?.id,
+      },
+    });
+    router.push('/boards');
   };
   useEffect(() => {
     setName(board?.name);
@@ -108,7 +111,7 @@ const BoardSettings: React.FC<BoardSettingsProps> = ({ board }) => {
                       _hover={{
                         backgroundColor: 'red.600',
                       }}
-                      //   isLoading={boardDelete}
+                      isLoading={loading}
                       loadingText='Deleting'
                     >
                       <AiOutlineDelete /> &nbsp;Delete
