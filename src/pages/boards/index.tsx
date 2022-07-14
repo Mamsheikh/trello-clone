@@ -18,6 +18,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
 import {
+  BoardsDocument,
   useBoardsQuery,
   useCreateBoardMutation,
 } from '../../generated/graphql';
@@ -72,6 +73,15 @@ const Boards = () => {
                   await createBoard({
                     variables: {
                       name,
+                    },
+                    update(cache, { data: { createBoard } }) {
+                      const { boards }: { boards: any } = cache.readQuery({
+                        query: BoardsDocument,
+                      });
+                      cache.writeQuery({
+                        query: BoardsDocument,
+                        data: { boards: [...boards, createBoard] },
+                      });
                     },
                     onCompleted(data) {
                       onClose();

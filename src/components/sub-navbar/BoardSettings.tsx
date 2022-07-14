@@ -55,6 +55,9 @@ const BoardSettings: React.FC<BoardSettingsProps> = ({ board }) => {
       variables: {
         boardId: board?.id,
       },
+      update: (cache) => {
+        cache.evict({ id: 'Board:' + board.id });
+      },
     });
     router.push('/boards');
   };

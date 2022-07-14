@@ -4,9 +4,28 @@ import theme from '../theme';
 import { AppProps } from 'next/app';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        boards: {
+          merge(existing, incoming) {
+            return incoming;
+          },
+        },
+        // projects: {
+        //   merge(existing, incoming) {
+        //     return incoming;
+        //   },
+        // },
+      },
+    },
+  },
+});
+
 const client = new ApolloClient({
   uri: 'http://localhost:3000/api/graphql',
-  cache: new InMemoryCache(),
+  cache: cache,
   credentials: 'include',
 });
 

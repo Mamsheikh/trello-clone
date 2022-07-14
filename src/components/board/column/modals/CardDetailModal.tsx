@@ -48,6 +48,9 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       variables: {
         cardId: card.id,
       },
+      update: (cache) => {
+        cache.evict({ id: 'Card:' + card.id });
+      },
     });
 
     onClose();

@@ -45,7 +45,7 @@ model Card {
   id          String   @id @default(cuid())
   board       Board?   @relation(fields: [boardId], references: [id])
   boardId     String
-  column      Column   @relation(fields: [columnId], references: [id])
+  column      Column   @relation(fields: [columnId], references: [id], onDelete: Cascade)
   columnId    String
   title       String
   createdAt   DateTime @default(now())

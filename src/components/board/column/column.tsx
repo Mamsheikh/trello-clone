@@ -115,6 +115,9 @@ const SingleColumn: React.FC<ColumnProps> = ({
       variables: {
         columnId: id,
       },
+      update: (cache) => {
+        cache.evict({ id: 'Column:' + id });
+      },
     });
   };
 
