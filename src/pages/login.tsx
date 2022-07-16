@@ -17,7 +17,7 @@ import React, { useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import LoginInput from '../components/LoginInput';
-import { useLoginMutation } from '../generated/graphql';
+import { MeDocument, MeQuery, useLoginMutation } from '../generated/graphql';
 import { ApolloError } from '@apollo/client';
 import { useRouter } from 'next/router';
 
@@ -125,6 +125,15 @@ const Login = () => {
                         email: creds.email,
                         password: creds.password,
                       },
+                    },
+                    update: (cache, { data }) => {
+                      cache.writeQuery<MeQuery>({
+                        query: MeDocument,
+                        data: {
+                          __typename: 'Query',
+                          me: dcata?.login,
+                        },
+                      });
                     },
                     onCompleted(data) {
                       if (data.login) {
