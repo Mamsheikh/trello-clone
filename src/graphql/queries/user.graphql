@@ -21,3 +21,7 @@ query Me {
     email
   }
 }
+
+mutation LogoutMutation {
+  logout
+}

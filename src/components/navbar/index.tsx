@@ -1,16 +1,36 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Button, Image, Flex, Box, Spacer, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { GrLogout } from 'react-icons/gr';
-import { useMeQuery } from '../../generated/graphql';
+import {
+  useLogoutMutationMutation,
+  useMeLazyQuery,
+  useMeQuery,
+} from '../../generated/graphql';
+import { useRouter } from 'next/router';
 
 type IProps = {
   bg?: string;
 };
 
+const isServer = () => typeof window === 'undefined';
+
 const NavBar: FC<IProps> = ({ bg }) => {
-  const { data, loading } = useMeQuery();
+  const { data, loading } = useMeQuery({
+    errorPolicy: 'all',
+  });
+
+  // useEffect(() => {
+  //   try {
+  //     me();
+  //   } catch (error) {
+  //     console.log('failed to query user', error);
+  //   }
+  // }, [data?.me]);
+
+  const [logout, { client }] = useLogoutMutationMutation();
+  const router = useRouter();
   const renderButtons = () => {
     if (data?.me) {
       return (
@@ -21,7 +41,14 @@ const NavBar: FC<IProps> = ({ bg }) => {
           float='right'
           mr='2'
           pr='2'
-          onClick={() => {}}
+          onClick={async () => {
+            await logout({
+              onCompleted: () => {
+                router.push('/login');
+              },
+            });
+            await client.resetStore();
+          }}
         >
           <GrLogout />
         </Button>

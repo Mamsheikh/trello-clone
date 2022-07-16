@@ -131,7 +131,7 @@ const Login = () => {
                         query: MeDocument,
                         data: {
                           __typename: 'Query',
-                          me: dcata?.login,
+                          me: data?.login,
                         },
                       });
                     },

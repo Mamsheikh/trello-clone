@@ -44,6 +44,7 @@ type Mutation {
   deleteCard(cardId: String!): Card
   deleteColumn(columnId: String!): Column
   login(input: loginUserInput!): User
+  logout: Boolean
   signup(input: createUserInput!): User
   updateBoard(backgroundImage: String, boardId: String!, name: String): Board
   updateCard(input: updateCardInput): Card

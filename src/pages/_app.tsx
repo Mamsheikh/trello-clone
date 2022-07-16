@@ -40,17 +40,17 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>Trello clone</title>
         <link rel='shortcut icon' href='/trello-icon.svg'></link>
       </Head>
-      <ApolloProvider client={client}>
-        <NextNprogress
-          color='#0079bf'
-          startPosition={0.3}
-          stopDelayMs={200}
-          height={4}
-        />
-        <ChakraProvider resetCSS theme={theme}>
+      <NextNprogress
+        color='#0079bf'
+        startPosition={0.3}
+        stopDelayMs={200}
+        height={4}
+      />
+      <ChakraProvider resetCSS theme={theme}>
+        <ApolloProvider client={client}>
           <Component {...pageProps} />
-        </ChakraProvider>
-      </ApolloProvider>
+        </ApolloProvider>
+      </ChakraProvider>
     </>
   );
 }
