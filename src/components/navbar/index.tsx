@@ -31,6 +31,7 @@ const NavBar: FC<IProps> = ({ bg }) => {
 
   const [logout, { client }] = useLogoutMutationMutation();
   const router = useRouter();
+
   const renderButtons = () => {
     if (data?.me) {
       return (

@@ -24,13 +24,10 @@ export const boardQuery = extendType({
       type: 'Board',
       args: { boardId: nonNull(stringArg()) },
       async resolve(_parent, args, ctx: Context) {
-        // const decodedJwt = await isAuth(ctx.req);
+        const decodedJwt = await isAuth(ctx.req);
         return await ctx.prisma.board.findFirst({
           where: {
-            AND: [
-              { id: args.boardId },
-              { userId: 'cl58pyci20017gwdyq8s0nocp' },
-            ],
+            AND: [{ id: args.boardId }, { userId: decodedJwt.userId }],
           },
         });
       },

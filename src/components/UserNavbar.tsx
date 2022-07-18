@@ -11,15 +11,18 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { User } from '../generated/graphql';
+import { useLogoutMutationMutation, User } from '../generated/graphql';
 import { AiOutlineHome } from 'react-icons/ai';
 import { SiTrello } from 'react-icons/si';
+import { useRouter } from 'next/router';
 
 interface UserNavbarProps {
   user: User;
 }
 
 const UserNavbar: React.FC<UserNavbarProps> = ({ user }) => {
+  const [logout, { client }] = useLogoutMutationMutation();
+  const router = useRouter();
   const renderButtons = () => {
     if (user) {
       return (
@@ -34,7 +37,18 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ user }) => {
               />
             </MenuButton>
             <MenuList>
-              <MenuItem onClick={() => {}}>Log out</MenuItem>
+              <MenuItem
+                onClick={async () => {
+                  await logout({
+                    onCompleted: () => {
+                      router.push('/login');
+                    },
+                  });
+                  await client.resetStore();
+                }}
+              >
+                Log out
+              </MenuItem>
             </MenuList>
           </Menu>
         </>
