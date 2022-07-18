@@ -28,7 +28,7 @@ const cache = new InMemoryCache({
 });
 
 const client = new ApolloClient({
-  uri: 'http://localhost:3000/api/graphql',
+  uri: 'https://trello-clone-smoky-mu.vercel.app/api/graphql',
   cache: cache,
   credentials: 'include',
 });
