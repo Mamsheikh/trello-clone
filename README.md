@@ -1,35 +1,56 @@
-# Example app with [chakra-ui](https://github.com/chakra-ui/chakra-ui) and TypeScript
+# trello-clone
 
-This example features how to use [chakra-ui](https://github.com/chakra-ui/chakra-ui) as the component library within a Next.js app with TypeScript.
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 
-Next.js and chakra-ui have built-in TypeScript declarations, so we'll get autocompletion for their modules straight away.
+![Trello clone](https://github.com/mamsheikh/trello-clone/demo.gif)
 
-We are connecting the Next.js `_app.js` with `chakra-ui`'s Provider and theme so the pages can have app-wide dark/light mode. We are also creating some components which shows the usage of `chakra-ui`'s style props.
+- [Overview](#overview)
+- [Features](#features)
+- [Requirements](#requirements)
+- [What is next?](#Whats-next)
+- [Tech Stack](#tech-stacks)
+- [Acknowledgements](#acknowledgement)
+- [License](#license)
 
-## Deploy your own
+## Overview
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-chakra-ui)
+This is a clone application for trello. This has been built for learning purpose. The original project was built with MongoDB, Redux, REST API and I converted it to a Graphql API.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-chakra-ui-typescript&project-name=with-chakra-ui&repository-name=with-chakra-ui)
+### [Demo](https://trello-clone-smoky-mu.vercel.app/)
 
-## How to use
+## Features 🤩
 
-### Using `create-next-app`
+- Login/Register with JWT token authentication
+- Ability to create/update/delete the board
+- Ability to add/update/move/delete the card
+- Background image library for the board
+- Add labels to the card
+- Supports adding of detail description in the card
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+## Requirements
 
-```bash
-npx create-next-app --example with-chakra-ui with-chakra-ui-app
-# or
-yarn create next-app --example with-chakra-ui with-chakra-ui-app
-# or
-pnpm create next-app --example with-chakra-ui with-chakra-ui-app
-```
+1. [Node.js](https://nodejs.org/)
+2. [npm](https://www.npmjs.com/)
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+## What's next 🚀
 
-## Notes
+- solve the lagging problem
 
-Chakra has supported Gradients and RTL in `v1.1`. To utilize RTL, [add RTL direction and swap](https://chakra-ui.com/docs/features/rtl-support).
+## Tech stacks
 
-If you don't have multi-direction app, you should make `<Html lang="ar" dir="rtl">` inside `_document.ts`.
+- Nextjs with typescript
+- Prisma
+- GraphQl
+- Apollo Client
+- Mongo Atlas for production DB
+- Chakra UI library
+
+### Acknowledgements
+
+- [Ankit Kumar](https://github.com/knowankit)
+
+## License
+
+This project is licensed under the **MIT license**. Feel free to edit and distribute this template as you like.
+
+See [LICENSE](LICENSE) for more information.
