@@ -2,7 +2,7 @@
 
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 
-![Trello clone](https://github.com/mamsheikh/trello-clone/demo.gif)
+![Trello clone](https://github.com/Mamsheikh/trello-clone/blob/main/demo.gif)
 
 - [Overview](#overview)
 - [Features](#features)
