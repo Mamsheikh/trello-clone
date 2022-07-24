@@ -188,6 +188,46 @@ const Login = () => {
                   >
                     Login
                   </Button>
+                  <Button
+                    fontWeight='semibold'
+                    width='full'
+                    mt={4}
+                    type='submit'
+                    // disabled={
+                    //   !values.email || !values.fullName || !values.password
+                    //   // !values.confirm
+                    // }
+                    bg='success'
+                    color='white'
+                    onClick={() => {
+                      login({
+                        variables: {
+                          input: {
+                            email: 'jane@gmail.com',
+                            password: 'password',
+                          },
+                        },
+                        update: (cache, { data }) => {
+                          cache.writeQuery<MeQuery>({
+                            query: MeDocument,
+                            data: {
+                              __typename: 'Query',
+                              me: data?.login,
+                            },
+                          });
+                        },
+                        onCompleted(data) {
+                          if (data.login) {
+                            router.push('/home');
+                          }
+                        },
+                      });
+                    }}
+                    isLoading={isSubmitting}
+                    loadingText='Logging...'
+                  >
+                    Login as Guest
+                  </Button>
                   <Box m='5' textAlign='center'>
                     <Link href='/signup'>
                       <a>

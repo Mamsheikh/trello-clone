@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // import NavBar from '@/src/components/navbar';
 import { Box, Image, Flex, Text } from '@chakra-ui/react';
 import NavBar from '../navbar';
+import { useRouter } from 'next/router';
+import { useMeQuery } from '../../generated/graphql';
 
 const WelcomeScreen = (): JSX.Element => {
+  const router = useRouter();
+  const { data } = useMeQuery();
+
+  // useEffect(() => {
+  if (data?.me) {
+    router.push('/home');
+  }
+  // }, [data?.me]);
   return (
     <>
       <Box bgGradient='linear(darkblue, white)' height='100vh'>

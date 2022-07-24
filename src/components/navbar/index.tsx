@@ -20,15 +20,6 @@ const NavBar: FC<IProps> = ({ bg }) => {
   const { data, loading } = useMeQuery({
     errorPolicy: 'all',
   });
-
-  // useEffect(() => {
-  //   try {
-  //     me();
-  //   } catch (error) {
-  //     console.log('failed to query user', error);
-  //   }
-  // }, [data?.me]);
-
   const [logout, { client }] = useLogoutMutationMutation();
   const router = useRouter();
 
