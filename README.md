@@ -42,7 +42,6 @@ This is a clone application for trello. This has been built for learning purpose
 - Prisma
 - GraphQl
 - Apollo Client
-- Mongo Atlas for production DB
 - Chakra UI library
 
 ### Acknowledgements
